@@ -117,51 +117,57 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CHAL-01 | TBD | Pending |
-| CHAL-02 | TBD | Pending |
-| CHAL-03 | TBD | Pending |
-| CHAL-04 | TBD | Pending |
-| CHAL-05 | TBD | Pending |
-| COMP-01 | TBD | Pending |
-| COMP-02 | TBD | Pending |
-| COMP-03 | TBD | Pending |
-| COMP-04 | TBD | Pending |
-| COMP-05 | TBD | Pending |
-| COMP-06 | TBD | Pending |
-| DATA-01 | TBD | Pending |
-| DATA-02 | TBD | Pending |
-| DATA-03 | TBD | Pending |
-| NOTF-01 | TBD | Pending |
-| NOTF-02 | TBD | Pending |
-| NOTF-03 | TBD | Pending |
-| NOTF-04 | TBD | Pending |
-| WIDG-01 | TBD | Pending |
-| WIDG-02 | TBD | Pending |
-| WIDG-03 | TBD | Pending |
-| WIDG-04 | TBD | Pending |
-| STAT-01 | TBD | Pending |
-| STAT-02 | TBD | Pending |
-| STAT-03 | TBD | Pending |
-| STAT-04 | TBD | Pending |
-| STAT-05 | TBD | Pending |
-| PAID-01 | TBD | Pending |
-| PAID-02 | TBD | Pending |
-| PAID-03 | TBD | Pending |
-| PAID-04 | TBD | Pending |
-| PAID-05 | TBD | Pending |
-| PAID-06 | TBD | Pending |
-| SETT-01 | TBD | Pending |
-| SETT-02 | TBD | Pending |
-| SETT-03 | TBD | Pending |
-| SETT-04 | TBD | Pending |
-| SETT-05 | TBD | Pending |
-| SETT-06 | TBD | Pending |
+| CHAL-01 | Phase 1 | Pending |
+| CHAL-02 | Phase 1 | Pending |
+| CHAL-03 | Phase 1 | Pending |
+| CHAL-04 | Phase 1 | Pending |
+| CHAL-05 | Phase 1 | Pending |
+| COMP-01 | Phase 1 | Pending |
+| COMP-02 | Phase 1 | Pending |
+| COMP-03 | Phase 1 | Pending |
+| COMP-04 | Phase 1 | Pending |
+| COMP-05 | Phase 1 | Pending |
+| COMP-06 | Phase 1 | Pending |
+| DATA-01 | Phase 1 | Pending |
+| DATA-02 | Phase 1 | Pending |
+| DATA-03 | Phase 1 | Pending |
+| NOTF-01 | Phase 2 | Pending |
+| NOTF-02 | Phase 2 | Pending |
+| NOTF-03 | Phase 2 | Pending |
+| NOTF-04 | Phase 2 | Pending |
+| WIDG-01 | Phase 2 | Pending |
+| WIDG-02 | Phase 2 | Pending |
+| WIDG-03 | Phase 2 | Pending |
+| WIDG-04 | Phase 2 | Pending |
+| STAT-01 | Phase 4 | Pending |
+| STAT-02 | Phase 4 | Pending |
+| STAT-03 | Phase 4 | Pending |
+| STAT-04 | Phase 4 | Pending |
+| STAT-05 | Phase 4 | Pending |
+| PAID-01 | Phase 3 | Pending |
+| PAID-02 | Phase 3 | Pending |
+| PAID-03 | Phase 3 | Pending |
+| PAID-04 | Phase 3 | Pending |
+| PAID-05 | Phase 3 | Pending |
+| PAID-06 | Phase 3 | Pending |
+| SETT-01 | Phase 3 | Pending |
+| SETT-02 | Phase 3 | Pending |
+| SETT-03 | Phase 3 | Pending |
+| SETT-04 | Phase 3 | Pending |
+| SETT-05 | Phase 3 | Pending |
+| SETT-06 | Phase 3 | Pending |
 
 **Coverage:**
 - v1 requirements: 34 total
-- Mapped to phases: 0
-- Unmapped: 34 (pending roadmap creation)
+- Mapped to phases: 34
+- Unmapped: 0
+
+**Phase Distribution:**
+- Phase 1 (Foundation & Core Flow): 14 requirements
+- Phase 2 (iOS Integration): 8 requirements
+- Phase 3 (Monetization & Settings): 12 requirements
+- Phase 4 (Stats & Polish): 5 requirements
 
 ---
 *Requirements defined: 2026-01-26*
-*Last updated: 2026-01-26 after initial definition*
+*Last updated: 2026-01-26 after roadmap creation*
