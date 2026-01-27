@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2025-01-25)
 ## Current Position
 
 Phase: 1 of 4 (Foundation & Core Flow)
-Plan: 1 of 5 complete
+Plan: 2 of 5 complete
 Status: In progress
-Last activity: 2026-01-26 - Completed 01-01-PLAN.md
+Last activity: 2026-01-27 - Completed 01-02-PLAN.md
 
-Progress: [██░░░░░░░░] 10%
+Progress: [████░░░░░░] 20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 5 min
-- Total execution time: 0.08 hours
+- Total plans completed: 2
+- Average duration: 4 min
+- Total execution time: 0.13 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 01-foundation-core-flow | 1/5 | 5 min | 5 min |
+| 01-foundation-core-flow | 2/5 | 8 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min)
-- Trend: N/A (first plan)
+- Last 5 plans: 01-01 (5 min), 01-02 (3 min)
+- Trend: Improving
 
 *Updated after each plan completion*
 
@@ -55,6 +55,12 @@ Recent decisions affecting current work:
 - Downgraded build_runner to 2.4.13 for hive_generator compatibility
 - Renamed DateUtils to AppDateUtils to avoid Flutter conflict
 
+**Plan 01-02 Decisions:**
+- Standard Riverpod providers instead of @riverpod code generation (carried forward from 01-01)
+- AsyncValue.guard pattern for all notifier mutations
+- Full list reload after mutations (simplicity over optimistic updates for V1)
+- Provider.family for single challenge access from list
+
 ### Pending Todos
 
 None yet.
@@ -75,11 +81,11 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-26
-Stopped at: Completed 01-01-PLAN.md (Project Setup & Core Models)
-Resume file: None - ready for 01-02-PLAN.md
+Last session: 2026-01-27
+Stopped at: Completed 01-02-PLAN.md (Repository & State Management)
+Resume file: None - ready for 01-03-PLAN.md
 
 ---
 
 *State initialized: 2026-01-26*
-*Last updated: 2026-01-26*
+*Last updated: 2026-01-27*
