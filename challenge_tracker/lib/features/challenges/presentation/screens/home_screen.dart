@@ -4,6 +4,7 @@ import '../notifiers/challenge_list_notifier.dart';
 import '../widgets/challenge_grid_item.dart';
 import '../widgets/empty_state_view.dart';
 import 'challenge_detail_screen.dart';
+import 'pack_selection_screen.dart';
 
 /// Main home screen displaying grid of active challenges
 class HomeScreen extends ConsumerWidget {
@@ -105,13 +106,12 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  /// Navigate to add challenge screen (placeholder for Plan 04)
+  /// Navigate to pack selection screen to add a new challenge
   void _navigateToAddChallenge(BuildContext context) {
-    // TODO: Implement in Plan 04
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Add Challenge - Coming in Plan 04'),
-        duration: Duration(seconds: 2),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PackSelectionScreen(),
       ),
     );
   }
