@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 import 'features/challenges/data/services/hive_service.dart';
+import 'features/challenges/presentation/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,13 +33,23 @@ class ChallengeTrackerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: '30-Day Challenge',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.light,
+        ),
         useMaterial3: true,
       ),
-      home: const Scaffold(
-        body: Center(child: Text('Challenge Tracker')),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.blue,
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
       ),
+      themeMode: ThemeMode.system,
+      home: const HomeScreen(),
     );
   }
 }
