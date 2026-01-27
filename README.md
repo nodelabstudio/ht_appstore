@@ -1,51 +1,89 @@
-# Flutter App Builder
+# 30-Day Challenge Tracker
 
-A comprehensive toolkit for building production-grade Flutter applications. This repository serves as both a **Knowledge Base** and a **Starter Kit**.
+A lean iOS app that helps people complete 30-day challenges with one tap per day. Local-first, no backend, subscription monetization.
 
-## 📚 What's Inside?
+## One-Sentence Promise
 
-*   **`references/`**: Detailed documentation on best practices for Auth, Security, API, and Deployment.
-*   **`assets/flutter-template/`**: A fully functional Clean Architecture starter project implementing the patterns from the references.
+Finish any 30-day challenge with one tap a day — streaks, reminders, and widgets that keep you on track.
 
-## 🚀 How to Use
+## Current Status
 
-### Option 1: As a Reference
-Browse the `references/` directory to find copy-pasteable patterns for:
-*   [Authentication](references/authentication.md)
-*   [Secure Storage](references/security.md)
-*   [API Integration](references/api-integration.md)
-*   [App Store Deployment](references/deployment.md)
+**Phase 1: Foundation & Core Flow** — Complete (5/5 plans)
 
-### Option 2: Start a New App
-This repository includes a script to generate a fresh project from the template.
+The app now has:
+- Challenge creation from 3 preset packs (No Sugar 30, Daily Walk 30, Read 10 Pages 30)
+- Home screen with challenge grid showing progress rings
+- One-tap "Done" completion flow
+- Streak tracking with timezone-safe logic
+- Undo same-day completion
+- Local persistence with Hive
 
-1.  **Clone this repository**:
-    ```bash
-    git clone https://github.com/yourusername/flutter-app-builder.git
-    cd flutter-app-builder
-    ```
+**Next:** Phase 2 (iOS Integration) — Widgets and notifications
 
-2.  **Run the generator script**:
-    ```bash
-    # Usage: ./create_app.sh <new_project_name> <destination_path>
-    ./create_app.sh my_amazing_app ../
-    ```
+## V1 Challenge Packs
 
-3.  **Start coding**:
-    ```bash
-    cd ../my_amazing_app
-    flutter run
-    ```
+- **No Sugar 30** — 30 days without added sugar
+- **Daily Walk 30** — 30 days of daily walks
+- **Read 10 Pages 30** — 30 days of reading 10 pages
 
-## 🏗 Template Architecture
-The starter template follows a scalable **Clean Architecture**:
+## Core Loop
+
 ```
-lib/
-├── config/        # Routes, Themes, Environment
-├── core/          # Services (Auth, API), Utilities
-├── features/      # Feature modules (Screens, Logic)
-└── shared/        # Reusable Widgets, Models
+Open → tap Done → day completes → streak continues → close
 ```
 
-## Contributing
-Feel free to submit PRs to improve the reference documentation or the base template!
+## Tech Stack
+
+- **Framework:** Flutter (iOS-only for V1)
+- **State:** Riverpod with AsyncNotifier pattern
+- **Storage:** Hive (local-first, widget-compatible via App Groups)
+- **IAP:** RevenueCat (planned for Phase 3)
+- **Architecture:** Feature-first with clean separation
+
+## Project Structure
+
+```
+challenge_tracker/
+├── lib/
+│   ├── main.dart                 # App entry, Hive/timezone init
+│   ├── core/
+│   │   └── utils/                # StreakCalculator, DateUtils
+│   └── features/
+│       └── challenges/
+│           ├── data/
+│           │   ├── models/       # Challenge, ChallengePack
+│           │   ├── services/     # HiveService
+│           │   └── repositories/ # ChallengeRepository
+│           └── presentation/
+│               ├── screens/      # Home, Detail, PackSelection, Creation
+│               ├── widgets/      # ProgressRing, GridItem, EmptyState
+│               └── notifiers/    # ChallengeListNotifier
+└── .planning/                    # GSD workflow docs (roadmap, state, plans)
+```
+
+## Running the App
+
+```bash
+cd challenge_tracker
+flutter pub get
+flutter run
+```
+
+## Roadmap
+
+| Phase | Description | Status |
+|-------|-------------|--------|
+| 1 | Foundation & Core Flow | Complete |
+| 2 | iOS Integration (Widgets, Notifications) | Up Next |
+| 3 | Monetization & Settings | Planned |
+| 4 | Stats & Polish | Planned |
+
+## Documentation
+
+- `plan.md` — Full V1 product spec and build order
+- `journey.md` — Build log for X/Twitter posts
+- `.planning/` — Detailed phase plans, requirements, and state
+
+---
+
+*Built with the GSD (Get Shit Done) workflow*

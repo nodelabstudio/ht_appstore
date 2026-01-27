@@ -1,5 +1,34 @@
 # plan.md — 30‑Day Challenge Tracker (V1)
 
+## Current Status
+
+**Phase 1: Foundation & Core Flow** — COMPLETE (2026-01-27)
+
+| Step | Description | Status |
+|------|-------------|--------|
+| 1 | Project setup, theme, routing | Done |
+| 2 | Local data model + storage | Done |
+| 3 | Home → Detail → Add screens | Done |
+| 4 | Streak logic + date handling | Done |
+| 5 | Local notifications | **Next** (Phase 2) |
+| 6 | Paywall + subscriptions | Phase 3 |
+| 7 | Stats screen | Phase 4 |
+| 8 | Widgets | **Next** (Phase 2) |
+| 9 | Polish + TestFlight | Phase 4 |
+
+**What's built:**
+- 1,786 lines of Dart across 17 files
+- Challenge/ChallengePack models with Hive persistence
+- ChallengeRepository with CRUD + completion logic
+- Riverpod AsyncNotifier for reactive state
+- HomeScreen, PackSelectionScreen, ChallengeCreationScreen, ChallengeDetailScreen
+- ProgressRing widget, timezone-safe StreakCalculator
+- Material 3 theming with light/dark support
+
+**Next up:** Phase 2 — iOS Integration (widgets + notifications)
+
+---
+
 ## Goal
 
 Ship a lean iOS app in **14 days** that helps people complete **30‑day challenges** with one tap per day. The app is **local‑first** (no backend), **ASO-first**, and monetizes via **auto‑renewable subscriptions**.
