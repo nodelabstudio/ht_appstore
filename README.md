@@ -11,6 +11,7 @@ Finish any 30-day challenge with one tap a day — streaks, reminders, and widge
 **Phase 1: Foundation & Core Flow** — Complete (5/5 plans)
 
 The app now has:
+
 - Challenge creation from 3 preset packs (No Sugar 30, Daily Walk 30, Read 10 Pages 30)
 - Home screen with challenge grid showing progress rings
 - One-tap "Done" completion flow
@@ -43,7 +44,7 @@ Open → tap Done → day completes → streak continues → close
 ## Project Structure
 
 ```
-challenge_tracker/
+ht_appstore/
 ├── lib/
 │   ├── main.dart                 # App entry, Hive/timezone init
 │   ├── core/
@@ -64,26 +65,22 @@ challenge_tracker/
 ## Running the App
 
 ```bash
-cd challenge_tracker
+cd ht_appstore
 flutter pub get
 flutter run
 ```
 
 ## Roadmap
 
-| Phase | Description | Status |
-|-------|-------------|--------|
-| 1 | Foundation & Core Flow | Complete |
-| 2 | iOS Integration (Widgets, Notifications) | Up Next |
-| 3 | Monetization & Settings | Planned |
-| 4 | Stats & Polish | Planned |
+| Phase | Description                              | Status   |
+| ----- | ---------------------------------------- | -------- |
+| 1     | Foundation & Core Flow                   | Complete |
+| 2     | iOS Integration (Widgets, Notifications) | Up Next  |
+| 3     | Monetization & Settings                  | Planned  |
+| 4     | Stats & Polish                           | Planned  |
 
 ## Documentation
 
 - `plan.md` — Full V1 product spec and build order
 - `journey.md` — Build log for X/Twitter posts
 - `.planning/` — Detailed phase plans, requirements, and state
-
----
-
-*Built with the GSD (Get Shit Done) workflow*
