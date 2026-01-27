@@ -12,7 +12,7 @@ This roadmap delivers a lean iOS habit tracking app in 4 phases across 14 days. 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Core Flow** - Data models, persistence, and one-tap completion
+- [x] **Phase 1: Foundation & Core Flow** - Data models, persistence, and one-tap completion
 - [ ] **Phase 2: iOS Integration** - Widgets and daily reminder notifications
 - [ ] **Phase 3: Monetization & Settings** - RevenueCat paywall and app settings
 - [ ] **Phase 4: Stats & Polish** - Progress visualization and App Store compliance
@@ -40,11 +40,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 5 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Project setup, models, Hive persistence, streak calculator
-- [ ] 01-02-PLAN.md — Challenge repository and Riverpod AsyncNotifier
-- [ ] 01-03-PLAN.md — Home screen grid UI with progress rings
-- [ ] 01-04-PLAN.md — Pack selection and challenge creation screens
-- [ ] 01-05-PLAN.md — Challenge detail screen with Done/Undo buttons
+- [x] 01-01-PLAN.md — Project setup, models, Hive persistence, streak calculator
+- [x] 01-02-PLAN.md — Challenge repository and Riverpod AsyncNotifier
+- [x] 01-03-PLAN.md — Home screen grid UI with progress rings
+- [x] 01-04-PLAN.md — Pack selection and challenge creation screens
+- [x] 01-05-PLAN.md — Challenge detail screen with Done/Undo buttons
 
 ---
 
@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Core Flow | 0/5 | Not started | - |
+| 1. Foundation & Core Flow | 5/5 | ✓ Complete | 2026-01-27 |
 | 2. iOS Integration | 0/TBD | Not started | - |
 | 3. Monetization & Settings | 0/TBD | Not started | - |
 | 4. Stats & Polish | 0/TBD | Not started | - |
@@ -132,4 +132,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 ---
 
 *Roadmap created: 2026-01-26*
-*Last updated: 2026-01-26*
+*Last updated: 2026-01-27*
