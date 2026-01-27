@@ -1,5 +1,11 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/challenge.dart';
+
+/// Provider for HiveService (standard Riverpod, not code-generated)
+final hiveServiceProvider = Provider<HiveService>((ref) {
+  return HiveService();
+});
 
 class HiveService {
   static const String challengesBoxName = 'challenges';

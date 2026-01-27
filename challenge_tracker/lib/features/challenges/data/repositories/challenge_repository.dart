@@ -6,8 +6,9 @@ import '../services/hive_service.dart';
 import '../../../../core/utils/streak_calculator.dart';
 
 /// Provider for ChallengeRepository (standard Riverpod, not code-generated)
+/// Uses hiveServiceProvider for dependency injection
 final challengeRepositoryProvider = Provider<ChallengeRepository>((ref) {
-  return ChallengeRepository(hiveService: HiveService());
+  return ChallengeRepository(hiveService: ref.read(hiveServiceProvider));
 });
 
 class ChallengeRepository {
