@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
+import 'features/challenges/data/services/hive_service.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -11,6 +13,10 @@ void main() async {
 
   // Initialize timezone database
   tz.initializeTimeZones();
+
+  // Initialize HiveService (registers adapters)
+  final hiveService = HiveService();
+  await hiveService.init();
 
   runApp(
     const ProviderScope(
