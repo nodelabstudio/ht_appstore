@@ -37,10 +37,14 @@ Decimal phases appear between their surrounding integers in numeric order.
 7. All data persists across app restarts and device reboots
 8. Streak logic handles timezone changes correctly (no false streak breaks during travel/DST)
 
-**Plans**: TBD
+**Plans**: 5 plans
 
 Plans:
-- [ ] TBD (to be defined during plan-phase)
+- [ ] 01-01-PLAN.md — Project setup, models, Hive persistence, streak calculator
+- [ ] 01-02-PLAN.md — Challenge repository and Riverpod AsyncNotifier
+- [ ] 01-03-PLAN.md — Home screen grid UI with progress rings
+- [ ] 01-04-PLAN.md — Pack selection and challenge creation screens
+- [ ] 01-05-PLAN.md — Challenge detail screen with Done/Undo buttons
 
 ---
 
@@ -120,7 +124,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Core Flow | 0/TBD | Not started | - |
+| 1. Foundation & Core Flow | 0/5 | Not started | - |
 | 2. iOS Integration | 0/TBD | Not started | - |
 | 3. Monetization & Settings | 0/TBD | Not started | - |
 | 4. Stats & Polish | 0/TBD | Not started | - |
