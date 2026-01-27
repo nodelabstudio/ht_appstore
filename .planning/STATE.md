@@ -61,6 +61,10 @@ Recent decisions affecting current work:
 - Full list reload after mutations (simplicity over optimistic updates for V1)
 - Provider.family for single challenge access from list
 
+**Plan 01-04 Decisions:**
+- Navigator.popUntil for multi-screen return after challenge creation
+- Used withValues(alpha:) instead of deprecated withOpacity() for Flutter compatibility
+
 **Plan 01-05 Decisions:**
 - Large 200px progress ring with X/30 center text for visual prominence
 - Pack emoji as large visual identifier at top of screen
@@ -87,7 +91,7 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-01-27
-Stopped at: Re-executed 01-03-PLAN.md (Home Screen UI) - created missing SUMMARY.md
+Stopped at: Completed 01-04-PLAN.md (Add Challenge Flow)
 Resume file: None - Phase 1 complete, ready for Phase 2
 
 ---
