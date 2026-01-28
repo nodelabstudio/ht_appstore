@@ -5,6 +5,7 @@ import 'package:timezone/data/latest.dart' as tz;
 
 import 'features/challenges/data/services/hive_service.dart';
 import 'features/challenges/presentation/screens/home_screen.dart';
+import 'features/notifications/data/services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,9 @@ void main() async {
   // Initialize HiveService (registers adapters)
   final hiveService = HiveService();
   await hiveService.init();
+
+  // Initialize NotificationService
+  await NotificationService().init();
 
   runApp(
     const ProviderScope(
