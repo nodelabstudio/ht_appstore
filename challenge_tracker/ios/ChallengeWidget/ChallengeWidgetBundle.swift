@@ -12,6 +12,5 @@ import SwiftUI
 struct ChallengeWidgetBundle: WidgetBundle {
     var body: some Widget {
         ChallengeWidget()
-        ChallengeWidgetControl()
     }
 }
