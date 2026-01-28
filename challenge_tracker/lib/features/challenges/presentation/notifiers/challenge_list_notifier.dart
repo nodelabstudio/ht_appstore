@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/utils/streak_calculator.dart';
+import '../../../notifications/data/services/notification_service.dart';
 import '../../../widgets/data/services/widget_data_service.dart';
 import '../../data/models/challenge.dart';
 import '../../data/models/challenge_pack.dart';
@@ -62,11 +63,25 @@ class ChallengeListNotifier extends AsyncNotifier<List<Challenge>> {
   }) async {
     state = await AsyncValue.guard(() async {
       final repository = ref.read(challengeRepositoryProvider);
-      await repository.createChallenge(
+      final challenge = await repository.createChallenge(
         pack: pack,
         startDateUtc: startDateUtc,
         reminderTimeMinutes: reminderTimeMinutes,
       );
+
+      // Schedule notification if reminder time is set
+      if (reminderTimeMinutes != null) {
+        await NotificationService().scheduleDailyReminder(
+          challengeId: challenge.id,
+          challengeName: challenge.name,
+          hourOfDay: reminderTimeMinutes ~/ 60,
+          minute: reminderTimeMinutes % 60,
+        );
+      }
+
+      // Update widget with the new challenge
+      await _updateWidgetWithChallenge(challenge);
+
       return await repository.getAllChallenges();
     });
   }
@@ -112,7 +127,15 @@ class ChallengeListNotifier extends AsyncNotifier<List<Challenge>> {
   Future<void> deleteChallenge(String challengeId) async {
     state = await AsyncValue.guard(() async {
       final repository = ref.read(challengeRepositoryProvider);
+
+      // Cancel any scheduled notification for this challenge
+      await NotificationService().cancelNotification(challengeId);
+
       await repository.deleteChallenge(challengeId);
+
+      // Clear widget data (for V1, just clear - can be smarter in V2 if multiple challenges)
+      await WidgetDataService().clearWidgetData();
+
       return await repository.getAllChallenges();
     });
   }
