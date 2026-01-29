@@ -35,6 +35,9 @@ class Challenge extends HiveObject {
     this.isStreakFrozen = false,
   }) : completionDatesUtc = completionDatesUtc ?? [];
 
+  // Sentinel value to distinguish "not provided" from "set to null"
+  static const _unset = -1;
+
   // Immutable copy helper
   Challenge copyWith({
     String? id,
@@ -42,7 +45,7 @@ class Challenge extends HiveObject {
     String? packId,
     int? startDateUtc,
     List<int>? completionDatesUtc,
-    int? reminderTimeMinutes,
+    int? reminderTimeMinutes = _unset,
     bool? isStreakFrozen,
   }) {
     return Challenge(
@@ -51,7 +54,9 @@ class Challenge extends HiveObject {
       packId: packId ?? this.packId,
       startDateUtc: startDateUtc ?? this.startDateUtc,
       completionDatesUtc: completionDatesUtc ?? List.from(this.completionDatesUtc),
-      reminderTimeMinutes: reminderTimeMinutes ?? this.reminderTimeMinutes,
+      reminderTimeMinutes: reminderTimeMinutes == _unset
+          ? this.reminderTimeMinutes
+          : reminderTimeMinutes,
       isStreakFrozen: isStreakFrozen ?? this.isStreakFrozen,
     );
   }

@@ -14,6 +14,10 @@ class NotificationService {
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
   bool _isInitialized = false;
+  bool _globalEnabled = true;
+
+  /// Whether notifications are globally enabled.
+  bool get globalEnabled => _globalEnabled;
 
   /// Initialize the notification service.
   ///
@@ -102,9 +106,15 @@ class NotificationService {
     await _plugin.cancel(id: _notificationIdFromChallengeId(challengeId));
   }
 
-  /// Cancel all scheduled notifications.
+  /// Cancel all scheduled notifications and mark globally disabled.
   Future<void> cancelAllNotifications() async {
     await _plugin.cancelAll();
+    _globalEnabled = false;
+  }
+
+  /// Re-enable global notifications flag.
+  void setGlobalEnabled(bool enabled) {
+    _globalEnabled = enabled;
   }
 
   /// Convert challenge ID to notification ID.

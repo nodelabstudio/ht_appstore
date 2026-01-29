@@ -5,6 +5,7 @@ import '../widgets/challenge_grid_item.dart';
 import '../widgets/empty_state_view.dart';
 import 'challenge_detail_screen.dart';
 import 'pack_selection_screen.dart';
+import '../../../settings/presentation/screens/settings_screen.dart';
 
 /// Main home screen displaying grid of active challenges
 class HomeScreen extends ConsumerWidget {
@@ -18,6 +19,19 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('30-Day Challenges'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: challengesAsync.when(
         loading: () => const Center(

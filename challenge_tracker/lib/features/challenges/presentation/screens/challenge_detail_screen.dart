@@ -109,7 +109,13 @@ class ChallengeDetailScreen extends ConsumerWidget {
                       color: Colors.grey,
                     ),
               ),
-              const SizedBox(height: 32),
+              // Reminder toggle
+              const Divider(height: 32),
+              _ReminderToggle(
+                challengeId: challengeId,
+                reminderTimeMinutes: challenge.reminderTimeMinutes,
+              ),
+              const SizedBox(height: 16),
 
               // Completion state and controls
               if (isCompletedToday) ...[
@@ -265,6 +271,74 @@ class _UndoButton extends StatelessWidget {
       style: TextButton.styleFrom(
         foregroundColor: Colors.grey.shade600,
       ),
+    );
+  }
+}
+
+/// Toggle for per-challenge daily reminder notification
+class _ReminderToggle extends ConsumerWidget {
+  final String challengeId;
+  final int? reminderTimeMinutes;
+
+  const _ReminderToggle({
+    required this.challengeId,
+    required this.reminderTimeMinutes,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final hasReminder = reminderTimeMinutes != null;
+
+    return Row(
+      children: [
+        Icon(
+          Icons.notifications_outlined,
+          color: hasReminder
+              ? Theme.of(context).colorScheme.primary
+              : Colors.grey,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Daily Reminder',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              if (hasReminder)
+                Text(
+                  AppDateUtils.formatReminderTime(reminderTimeMinutes!),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: Colors.grey,
+                      ),
+                ),
+            ],
+          ),
+        ),
+        Switch(
+          value: hasReminder,
+          onChanged: (enabled) async {
+            if (enabled) {
+              final picked = await showTimePicker(
+                context: context,
+                initialTime: const TimeOfDay(hour: 9, minute: 0),
+                helpText: 'Set Daily Reminder',
+              );
+              if (picked != null) {
+                final minutes = AppDateUtils.timeOfDayToMinutes(picked);
+                await ref
+                    .read(challengeListProvider.notifier)
+                    .updateReminderTime(challengeId, minutes);
+              }
+            } else {
+              await ref
+                  .read(challengeListProvider.notifier)
+                  .updateReminderTime(challengeId, null);
+            }
+          },
+        ),
+      ],
     );
   }
 }

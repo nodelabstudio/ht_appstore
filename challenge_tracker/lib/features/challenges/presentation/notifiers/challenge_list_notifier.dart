@@ -123,6 +123,29 @@ class ChallengeListNotifier extends AsyncNotifier<List<Challenge>> {
     });
   }
 
+  /// Update reminder time for a challenge.
+  /// Pass null to disable reminder (cancels notification).
+  /// Pass minutes-since-midnight to enable/change reminder.
+  Future<void> updateReminderTime(String challengeId, int? reminderTimeMinutes) async {
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(challengeRepositoryProvider);
+      final updatedChallenge = await repository.updateReminderTime(challengeId, reminderTimeMinutes);
+
+      if (reminderTimeMinutes != null) {
+        await NotificationService().scheduleDailyReminder(
+          challengeId: challengeId,
+          challengeName: updatedChallenge.name,
+          hourOfDay: reminderTimeMinutes ~/ 60,
+          minute: reminderTimeMinutes % 60,
+        );
+      } else {
+        await NotificationService().cancelNotification(challengeId);
+      }
+
+      return await repository.getAllChallenges();
+    });
+  }
+
   /// Delete challenge
   Future<void> deleteChallenge(String challengeId) async {
     state = await AsyncValue.guard(() async {

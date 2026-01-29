@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2025-01-25)
 ## Current Position
 
 Phase: 2 of 4 (iOS Integration)
-Plan: 4 of 5 (Widget Integration with Challenges)
-Status: In progress
-Last activity: 2026-01-28 - Completed 02-04-PLAN.md
+Plan: 7 of 7 (Gap closure complete)
+Status: Phase 2 complete
+Last activity: 2026-01-29 - Completed 02-05, 02-06, 02-07
 
-Progress: [██████████] Phase 1 complete | [████████░░] Phase 2: 80%
+Progress: [██████████] Phase 1 complete | [██████████] Phase 2 complete
 
 ## Performance Metrics
 
@@ -28,11 +28,11 @@ Progress: [██████████] Phase 1 complete | [█████�
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-foundation-core-flow | 5/5 | 17 min | 3.4 min |
-| 02-ios-integration | 4/5 | 198 min | 49.5 min |
+| 02-ios-integration | 7/7 | 208 min | 29.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-05 (2 min), 02-01 (18 min), 02-02 (82 min), 02-03 (96 min), 02-04 (2 min)
-- Trend: 02-04 fast (wiring only, no native/Xcode work needed)
+- Last 5 plans: 02-03 (96 min), 02-04 (2 min), 02-05 (verification), 02-06 (3 min), 02-07 (5 min)
+- Trend: Gap closure plans fast (wiring only)
 
 *Updated after each plan completion*
 
@@ -89,6 +89,17 @@ Recent decisions affecting current work:
 - GlobalKey<NavigatorState> for programmatic deep link navigation
 - URI parsing: challengetracker://challenge/{id} with scheme/host/pathSegments
 
+**Plan 02-06 Decisions:**
+- Permission flow wired into _createChallenge() (not _selectTime())
+- Pre-permission dialog shown before iOS system dialog
+- Denial clears reminderTimeMinutes to null with SnackBar feedback
+
+**Plan 02-07 Decisions:**
+- Challenge.copyWith sentinel pattern (_unset = -1) to support clearing nullable reminderTimeMinutes
+- Global notification toggle is "mute all" — preserves per-challenge reminder settings
+- NotificationService singleton tracks globalEnabled state for settings screen
+- Settings screen is minimal for Phase 2; Phase 3 expands with full SETT requirements
+
 ### Pending Todos
 
 None yet.
@@ -110,11 +121,11 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-28
-Stopped at: Completed 02-04-PLAN.md (Widget Integration with Challenges)
-Resume file: None - ready for 02-05-PLAN.md
+Last session: 2026-01-29
+Stopped at: Phase 2 complete. Ready for Phase 3 (Monetization & Settings)
+Resume file: None - ready for Phase 3 planning
 
 ---
 
 *State initialized: 2026-01-26*
-*Last updated: 2026-01-28*
+*Last updated: 2026-01-29*

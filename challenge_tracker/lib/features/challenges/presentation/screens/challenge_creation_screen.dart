@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/models/challenge_pack.dart';
 import '../../presentation/notifiers/challenge_list_notifier.dart';
 import '../../../../core/utils/date_utils.dart';
+import '../../../notifications/presentation/widgets/notification_permission_dialog.dart';
+import '../../../notifications/data/services/notification_service.dart';
 
 /// Screen for creating a new challenge from a selected pack
 class ChallengeCreationScreen extends ConsumerStatefulWidget {
@@ -289,15 +291,39 @@ class _ChallengeCreationScreenState
       final startDateUtc = _startDate.toUtc().millisecondsSinceEpoch ~/ 1000;
 
       // Convert reminder time to minutes since midnight (if set)
-      final reminderTimeMinutes = _reminderTime != null
+      int? finalReminderTimeMinutes = _reminderTime != null
           ? AppDateUtils.timeOfDayToMinutes(_reminderTime!)
           : null;
+
+      // Request notification permission if reminder time is set
+      if (finalReminderTimeMinutes != null && mounted) {
+        final userConsented =
+            await NotificationPermissionDialog.show(context);
+        if (userConsented) {
+          final granted = await NotificationService().requestPermission();
+          if (!granted) {
+            finalReminderTimeMinutes = null;
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text(
+                    'Notification permission denied. Reminder not set. '
+                    'You can enable notifications in iOS Settings.',
+                  ),
+                ),
+              );
+            }
+          }
+        } else {
+          finalReminderTimeMinutes = null;
+        }
+      }
 
       // Create the challenge
       await ref.read(challengeListProvider.notifier).createChallenge(
             pack: widget.pack,
             startDateUtc: startDateUtc,
-            reminderTimeMinutes: reminderTimeMinutes,
+            reminderTimeMinutes: finalReminderTimeMinutes,
           );
 
       // Pop back to home screen on success
