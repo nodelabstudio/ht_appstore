@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(ls:*)",
+      "Bash(flutter pub get:*)",
+      "Bash(flutter build:*)",
+      "Bash(flutter analyze:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(flutter pub deps:*)",
+      "Bash(xcodebuild:*)",
+      "Bash(flutter clean:*)",
+      "Bash(pod install)",
+      "Bash(grep:*)",
+      "Bash(git status:*)",
+      "Bash(cat:*)",
+      "Bash(git -C /Users/angelrodriguez/Desktop/VSCodeFiles/habit_tracker_appstore check-ignore -q .planning)",
+      "Skill(gsd:plan-phase)"
+    ]
+  }
+}
