@@ -7,6 +7,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'features/challenges/data/services/hive_service.dart';
 import 'features/challenges/presentation/screens/challenge_detail_screen.dart';
 import 'features/challenges/presentation/screens/home_screen.dart';
+import 'features/monetization/data/services/revenue_cat_service.dart';
 import 'features/notifications/data/services/notification_service.dart';
 import 'features/widgets/data/services/widget_data_service.dart';
 
@@ -28,6 +29,9 @@ void main() async {
 
   // Initialize NotificationService
   await NotificationService().init();
+
+  // Initialize RevenueCat SDK
+  await RevenueCatService().init();
 
   // Initialize WidgetDataService for home screen widget
   await WidgetDataService().init();
