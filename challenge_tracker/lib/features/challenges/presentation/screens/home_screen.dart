@@ -140,6 +140,8 @@ class HomeScreen extends ConsumerWidget {
   /// Free users with 1+ active challenges see paywall.
   /// Pro users and free users with 0 active challenges navigate to pack selection.
   Future<void> _navigateToAddChallenge(BuildContext context, WidgetRef ref) async {
+    const bool _inDebugMode = true; // Temporary flag for development
+
     // Read current challenges to count active ones
     final challenges = ref.read(challengeListProvider).valueOrNull ?? [];
     final activeCount = challenges.where((c) => c.progress < 1.0).length;
@@ -148,7 +150,7 @@ class HomeScreen extends ConsumerWidget {
     final isPro = ref.read(subscriptionProvider).valueOrNull ?? false;
 
     // Check if user hits free tier limit
-    if (activeCount >= MonetizationConstants.freeActiveChallengeLimit && !isPro) {
+    if (!_inDebugMode && activeCount >= MonetizationConstants.freeActiveChallengeLimit && !isPro) {
       // Show RevenueCat native paywall
       await RevenueCatUI.presentPaywallIfNeeded(
         MonetizationConstants.proEntitlementId,

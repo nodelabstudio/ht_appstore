@@ -26,11 +26,11 @@ class MonetizationConstants {
 
   /// Privacy policy URL shown in paywall and settings.
   /// Replace with your actual privacy policy URL.
-  static const privacyPolicyUrl = 'https://yoursite.com/privacy';
+  static const privacyPolicyUrl = 'https://www.privacypolicies.com/';
 
   /// Terms of service URL shown in paywall and settings.
   /// Replace with your actual terms of service URL.
-  static const termsOfServiceUrl = 'https://yoursite.com/terms';
+  static const termsOfServiceUrl = 'https://www.privacypolicies.com/';
 
   /// Support email for user inquiries.
   /// Replace with your actual support email address.
