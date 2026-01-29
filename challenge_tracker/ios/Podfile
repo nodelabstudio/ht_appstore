@@ -1,5 +1,5 @@
-# Define minimum iOS deployment target for home_widget
-platform :ios, '14.0'
+# Define minimum iOS deployment target for purchases_ui_flutter native paywalls
+platform :ios, '15.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
