@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import '../../../notifications/data/services/notification_service.dart';
+import '../../../monetization/data/constants/monetization_constants.dart';
 
-/// Minimal settings screen for Phase 2.
-/// Phase 3 will expand with restore purchases, support, legal links.
+/// Settings screen with notification toggle, restore purchases,
+/// support, legal links, and dynamic version.
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -12,11 +17,71 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   late bool _notificationsEnabled;
+  String _appVersion = '';
 
   @override
   void initState() {
     super.initState();
     _notificationsEnabled = NotificationService().globalEnabled;
+    _loadAppVersion();
+  }
+
+  Future<void> _loadAppVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _appVersion = '${info.version} (${info.buildNumber})';
+    });
+  }
+
+  Future<void> _restorePurchases() async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final customerInfo = await Purchases.restorePurchases();
+      if (customerInfo.entitlements.active
+          .containsKey(MonetizationConstants.proEntitlementId)) {
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text('Purchases restored successfully!'),
+          ),
+        );
+      } else {
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text('No previous purchases found.'),
+          ),
+        );
+      }
+    } on PlatformException {
+      messenger.showSnackBar(
+        const SnackBar(
+          content: Text('Failed to restore purchases. Please try again.'),
+        ),
+      );
+    }
+  }
+
+  Future<void> _launchEmail() async {
+    final uri = Uri(
+      scheme: 'mailto',
+      path: MonetizationConstants.supportEmail,
+    );
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
+  }
+
+  Future<void> _launchPrivacyPolicy() async {
+    final uri = Uri.parse(MonetizationConstants.privacyPolicyUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> _launchTermsOfService() async {
+    final uri = Uri.parse(MonetizationConstants.termsOfServiceUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 
   @override
@@ -58,6 +123,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
               } else {
                 NotificationService().setGlobalEnabled(true);
+                // Note: When notifications are re-enabled globally,
+                // challenges with set reminder times will need to be
+                // rescheduled. This is implicitly handled when challenges are
+                // next modified or completed, or explicitly if we add a
+                // "reschedule all" button. For now, rely on individual challenge updates.
                 messenger.showSnackBar(
                   const SnackBar(
                     content: Text(
@@ -69,10 +139,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           const Divider(),
-          const ListTile(
-            leading: Icon(Icons.info_outline),
-            title: Text('Version'),
-            subtitle: Text('1.0.0'),
+          ListTile(
+            leading: const Icon(Icons.restore),
+            title: const Text('Restore Purchases'),
+            onTap: _restorePurchases,
+          ),
+          ListTile(
+            leading: const Icon(Icons.email),
+            title: const Text('Contact Support'),
+            onTap: _launchEmail,
+          ),
+          ListTile(
+            leading: const Icon(Icons.description),
+            title: const Text('Privacy Policy'),
+            onTap: _launchPrivacyPolicy,
+          ),
+          ListTile(
+            leading: const Icon(Icons.assignment),
+            title: const Text('Terms of Service'),
+            onTap: _launchTermsOfService,
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.info_outline),
+            title: const Text('Version'),
+            subtitle: Text(_appVersion), // Use the dynamically loaded version
           ),
         ],
       ),

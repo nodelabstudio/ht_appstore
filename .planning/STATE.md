@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2025-01-25)
 
 **Core value:** One tap completes today's challenge and keeps the streak alive
-**Current focus:** Phase 2 - iOS Integration
+**Current focus:** Phase 3 - Monetization & Settings
 
 ## Current Position
 
-Phase: 2 of 4 (iOS Integration)
-Plan: 7 of 7 (Gap closure complete)
-Status: Phase 2 complete
-Last activity: 2026-01-29 - Completed 02-05, 02-06, 02-07
+Phase: 3 of 4 (Monetization & Settings)
+Plan: 1 of 4 (RevenueCat SDK Foundation)
+Status: In progress
+Last activity: 2026-01-29 - Completed 03-01-PLAN.md
 
-Progress: [██████████] Phase 1 complete | [██████████] Phase 2 complete
+Progress: [██████████] Phase 1 complete | [██████████] Phase 2 complete | [███░░░░░░░] Phase 3 1/4
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 24.2 min
-- Total execution time: 3.58 hours
+- Total plans completed: 10
+- Average duration: 22.6 min
+- Total execution time: 3.7 hours
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [██████████] Phase 1 complete | [█████�
 |-------|-------|-------|----------|
 | 01-foundation-core-flow | 5/5 | 17 min | 3.4 min |
 | 02-ios-integration | 7/7 | 208 min | 29.7 min |
+| 03-monetization-settings | 1/4 | 7 min | 7.0 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-03 (96 min), 02-04 (2 min), 02-05 (verification), 02-06 (3 min), 02-07 (5 min)
-- Trend: Gap closure plans fast (wiring only)
+- Last 5 plans: 02-04 (2 min), 02-05 (verification), 02-06 (3 min), 02-07 (5 min), 03-01 (7 min)
+- Trend: Foundation/wiring plans consistently fast
 
 *Updated after each plan completion*
 
@@ -100,6 +101,12 @@ Recent decisions affecting current work:
 - NotificationService singleton tracks globalEnabled state for settings screen
 - Settings screen is minimal for Phase 2; Phase 3 expands with full SETT requirements
 
+**Plan 03-01 Decisions:**
+- iOS deployment target bumped from 14.0 to 15.0 for purchases_ui_flutter native paywalls (iOS 14 has <1% market share)
+- subscriptionProvider uses polling pattern (30s interval) instead of customerInfoStream for purchases_flutter 9.x compatibility
+- RevenueCatService follows NotificationService singleton pattern for consistency
+- MonetizationConstants uses placeholder values (API key, URLs) for user replacement
+
 ### Pending Todos
 
 None yet.
@@ -117,13 +124,15 @@ None yet.
 
 **Phase 3 Risks:**
 - RevenueCat Product ID mismatches: Verify exact match across App Store Connect, RevenueCat dashboard, and code
-- Timeline underestimation: Allocate 2-3 days for RevenueCat integration and TestFlight testing
+- Timeline underestimation: Allocate 2-3 hours for RevenueCat dashboard setup (App Store Connect + RevenueCat configuration)
+- RevenueCat API key must be replaced in MonetizationConstants before purchase operations work
+- TestFlight testing required to verify purchase flow (Sandbox environment) before production
 
 ## Session Continuity
 
-Last session: 2026-01-29
-Stopped at: Phase 2 complete. Ready for Phase 3 (Monetization & Settings)
-Resume file: None - ready for Phase 3 planning
+Last session: 2026-01-29 18:21 UTC
+Stopped at: Completed 03-01-PLAN.md (RevenueCat SDK Foundation)
+Resume file: None - ready for 03-02 (Paywall Screen)
 
 ---
 
