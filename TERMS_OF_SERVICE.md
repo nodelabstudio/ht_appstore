@@ -1,10 +1,10 @@
-# Terms of Service for 30-Day Challenge Tracker
+# Terms of Service for Quest 30
 
 **Last updated: January 31, 2026**
 
 ## 1. Agreement to Terms
 
-By downloading, installing, or using the **30-Day Challenge Tracker** mobile application (the "Service"), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, then you do not have permission to access the Service.
+By downloading, installing, or using the **Quest 30** mobile application (the "Service"), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, then you do not have permission to access the Service.
 
 ## 2. Subscriptions
 
@@ -17,6 +17,7 @@ At the end of each Billing Cycle, your Subscription will automatically renew und
 ## 3. Content and Data
 
 Our Service allows you to create, store, and manage your personal challenge data. As outlined in our Privacy Policy, this data is stored **locally and exclusively on your device**. You are responsible for maintaining backups of your data. We are not responsible for any loss of data.
+For more details, please see our full Terms of Service at https://nodelabstudio.github.io/ht_appstore/terms.html.
 
 ## 4. Limitation Of Liability
 
@@ -29,4 +30,4 @@ These Terms shall be governed and construed in accordance with the laws of your 
 ## Contact Us
 
 If you have any questions about these Terms, please contact us:
-- By email: `support@yourapp.com` (Please replace with your actual support email)
+- By email: `angel@nodelab.dev`
