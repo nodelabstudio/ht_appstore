@@ -1,35 +1,37 @@
-# Privacy Policy
+# Privacy Policy for 30-Day Challenge Tracker
 
-**Last updated: January 29, 2026**
+**Last updated: January 31, 2026**
 
-This is a placeholder for your app's Privacy Policy. You must replace this with a real privacy policy before publishing your app.
+Welcome to 30-Day Challenge Tracker. We are committed to protecting your privacy. Our philosophy is simple: you own your data, and it should stay with you.
 
 ## Data Privacy: Your Data is Your Own
 
-We believe your personal data should be private. Our philosophy is simple: you own your data, and it should stay with you.
-
 ### Local-First Data Storage
-All data you create in this app, including your challenges, progress, and streaks, is stored **exclusively on your device**. 
+All data you create in **30-Day Challenge Tracker**, including your challenges, progress, and streaks, is stored **exclusively on your device** in a private, sandboxed location.
 - The data **never** leaves your device.
-- We **do not** have access to it.
+- We, the developers of **30-Day Challenge Tracker**, **do not** have access to it.
 - We **do not** transmit it to our servers or any third-party servers.
-- If you delete the app, all your data is permanently deleted along with it.
+- If you delete the app from your device, all your data is permanently deleted along with it.
 
 This means your challenge data is completely private and under your control.
 
 ## Information We Do Not Collect
 
-We do not collect any personal information, such as your name, email address, or location. We do not use any analytics services to track your usage patterns.
+**30-Day Challenge Tracker** does not collect any personal information, such as your name, email address, or location. We do not use any analytics services to track your usage patterns.
 
 ## Third-Party Services & In-App Purchases
 
-The only third-party service we use is **RevenueCat** to manage optional Pro subscriptions. When you consider a purchase, RevenueCat may collect an anonymous user ID to manage your subscription status. We do not receive any personally identifiable information from this process. For more details, please see the RevenueCat privacy policy.
+The only third-party service we use is **RevenueCat** to manage the optional "Pro" subscription. When you consider a purchase, RevenueCat may collect an anonymous user ID to manage your subscription status and validate purchases with the App Store. We do not receive any personally identifiable information from this process. For more details, please see the RevenueCat privacy policy.
 
-## Your Consent
+## Children's Privacy
 
-By using our app, you consent to our Privacy Policy.
+Our Service does not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13.
+
+## Changes to This Privacy Policy
+
+We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes.
 
 ## Contact Us
 
 If you have any questions about this Privacy Policy, you can contact us:
-- By email: [Your Support Email]
+- By email: `support@yourapp.com` (Please replace with your actual support email)

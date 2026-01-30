@@ -1,26 +1,26 @@
-# Terms of Service
+# Terms of Service for 30-Day Challenge Tracker
 
-**Last updated: January 29, 2026**
-
-This is a placeholder for your app's Terms of Service. You must replace this with your own terms before publishing your app.
+**Last updated: January 31, 2026**
 
 ## 1. Agreement to Terms
 
-By using our mobile application (the "Service"), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, then you do not have permission to access the Service.
+By downloading, installing, or using the **30-Day Challenge Tracker** mobile application (the "Service"), you agree to be bound by these Terms of Service. If you disagree with any part of the terms, then you do not have permission to access the Service.
 
 ## 2. Subscriptions
 
-Some parts of the Service are billed on a subscription basis ("Subscription(s)"). You will be billed in advance on a recurring and periodic basis ("Billing Cycle"). Billing cycles are set either on a monthly or annual basis, depending on the type of subscription plan you select when purchasing a Subscription.
+Some parts of the Service are billed on a subscription basis ("Subscription(s)"). The "Pro" version of the Service offers additional features, such as unlimited challenges.
 
-At the end of each Billing Cycle, your Subscription will automatically renew under the exact same conditions unless you cancel it or the app owner cancels it. You may cancel your Subscription renewal either through your online account management page or through the Apple App Store.
+You will be billed in advance on a recurring and periodic basis ("Billing Cycle"). Billing cycles are set either on a monthly or annual basis, depending on the type of subscription plan you select when purchasing a Subscription through the Apple App Store.
 
-## 3. Content
+At the end of each Billing Cycle, your Subscription will automatically renew under the exact same conditions unless you cancel it. You may cancel your Subscription renewal through your Apple ID account settings at any time.
 
-Our Service allows you to create, store, and manage your personal challenge data. This data is stored locally on your device. You are responsible for the content that you post on or through the Service, including its legality, reliability, and appropriateness.
+## 3. Content and Data
+
+Our Service allows you to create, store, and manage your personal challenge data. As outlined in our Privacy Policy, this data is stored **locally and exclusively on your device**. You are responsible for maintaining backups of your data. We are not responsible for any loss of data.
 
 ## 4. Limitation Of Liability
 
-In no event shall the app owner, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.
+The Service is provided on an "AS IS" and "AS AVAILABLE" basis. In no event shall the app owner be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.
 
 ## 5. Governing Law
 
@@ -29,4 +29,4 @@ These Terms shall be governed and construed in accordance with the laws of your 
 ## Contact Us
 
 If you have any questions about these Terms, please contact us:
-- By email: [Your Support Email]
+- By email: `support@yourapp.com` (Please replace with your actual support email)
