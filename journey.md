@@ -4,7 +4,7 @@
 This is the running log of how the app idea evolved and what we built each day, written in a way that can be adapted into daily X posts.
 
 ## Origin story (short)
-We started with a “Bible Sleep / lullaby verses” idea, discovered via Astro that search demand was low for those terms, then pivoted to ASO-driven idea selection. We tested “tap counter” and found high downloads but low revenue, indicating a mostly free/ad market. We then validated higher-revenue categories and chose a subscription-friendly direction: a **30‑Day Challenge Tracker**, using the **Streaks-style UI** as inspiration.
+We started with a “Bible Sleep / lullaby verses” idea, discovered via Astro that search demand was low for those terms, then pivoted to ASO-driven idea selection. We tested “tap counter” and found high downloads but low revenue, indicating a mostly free/ad market. We then validated higher-revenue categories and chose a subscription-friendly direction: a **Quest 30**, using the **Streaks-style UI** as inspiration.
 
 ## Research timeline (what happened)
 ### 1) Initial idea + constraint setting
@@ -21,7 +21,7 @@ We started with a “Bible Sleep / lullaby verses” idea, discovered via Astro 
 ### 4) Pivot to subscription-friendly markets
 - Validated “fasting” and “habit/streak” as higher revenue clusters.
 - Chose a direction that supports subscription **without requiring a backend**:
-  **30-Day Challenge Tracker** (program packs + widgets + stats).
+  **Quest 30** (program packs + widgets + stats).
 
 ### 5) Locked V1
 Challenge packs:
@@ -62,7 +62,7 @@ Home, Challenge Detail, Stats, Add Challenge, Paywall, Settings
 - Execute Phase 1: Foundation & Core Flow
 
 **X post draft (short)**
-Day 1: Planned the entire 30-day challenge tracker app.
+Day 1: Planned the entire Quest 30 app.
 34 requirements across 4 phases. Local-first, no backend.
 Biggest lesson: ASO research before coding saves you from building the wrong thing.
 Tomorrow: Building the core flow.
@@ -216,7 +216,7 @@ Tomorrow: Docs & launch prep.
 - …
 
 **X post draft (short)**
-Today I shipped ____ for my 30‑day challenge tracker.
+Today I shipped ____ for my Quest 30.
 Biggest lesson: ____.
 Tomorrow: ____.
 

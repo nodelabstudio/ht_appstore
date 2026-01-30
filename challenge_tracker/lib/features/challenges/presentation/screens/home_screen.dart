@@ -21,7 +21,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('30-Day Challenges'),
+        title: const Text('Quest 30'),
         centerTitle: true,
         actions: [
           IconButton(

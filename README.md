@@ -1,4 +1,4 @@
-# 30-Day Challenge Tracker
+# Quest 30
 
 A lean iOS app that helps people complete 30-day challenges with one tap per day. Local-first, no backend, subscription monetization.
 
