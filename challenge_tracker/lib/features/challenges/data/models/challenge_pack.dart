@@ -33,13 +33,6 @@ class ChallengePack {
     emoji: '📚',
   );
 
-  static const read10Pages30 = ChallengePack(
-    id: 'read_10_pages_30',
-    name: 'Read 10 Pages 30',
-    description: '30 days of reading 10 pages',
-    emoji: '📚',
-  );
-
   static const digitalDetox30 = ChallengePack(
     id: 'digital_detox_30',
     name: 'Digital Detox 30',
@@ -96,6 +89,13 @@ class ChallengePack {
     emoji: '🚫❤️',
   );
 
+  static const readBible30 = ChallengePack(
+    id: 'read_bible_30',
+    name: 'Read Bible 30',
+    description: '30 days of reading the Bible',
+    emoji: '✝️',
+  );
+
   static const List<ChallengePack> presets = [
     noSugar30,
     dailyWalk30,
@@ -108,17 +108,8 @@ class ChallengePack {
     jogging30,
     praying30,
     abstinence30,
+    readBible30,
   ];
-
-  static ChallengePack? getById(String id) {
-    try {
-      return presets.firstWhere((pack) => pack.id == id);
-    } catch (_) {
-      return null;
-    }
-  }
-}
-
 
   static ChallengePack? getById(String id) {
     try {

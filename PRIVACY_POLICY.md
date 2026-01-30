@@ -4,19 +4,26 @@
 
 This is a placeholder for your app's Privacy Policy. You must replace this with a real privacy policy before publishing your app.
 
-## Information Collection and Use
+## Data Privacy: Your Data is Your Own
 
-A real privacy policy should detail the types of information your app collects and how it is used. For this app:
-- **Local Data:** All challenge data is stored locally on your device and is not transmitted to any server.
-- **Anonymous Analytics (if any):** If you use analytics services like Google Analytics for Firebase, you must disclose what data is collected (e.g., device type, OS version, usage patterns).
-- **In-App Purchases:** If you use RevenueCat or another service, mention that purchase-related data (like anonymous user IDs and entitlement status) is managed by them.
+We believe your personal data should be private. Our philosophy is simple: you own your data, and it should stay with you.
 
-## Third-Party Services
+### Local-First Data Storage
+All data you create in this app, including your challenges, progress, and streaks, is stored **exclusively on your device**. 
+- The data **never** leaves your device.
+- We **do not** have access to it.
+- We **do not** transmit it to our servers or any third-party servers.
+- If you delete the app, all your data is permanently deleted along with it.
 
-Disclose any third-party services you use, such as:
-- RevenueCat
-- Google Analytics
-- AdMob
+This means your challenge data is completely private and under your control.
+
+## Information We Do Not Collect
+
+We do not collect any personal information, such as your name, email address, or location. We do not use any analytics services to track your usage patterns.
+
+## Third-Party Services & In-App Purchases
+
+The only third-party service we use is **RevenueCat** to manage optional Pro subscriptions. When you consider a purchase, RevenueCat may collect an anonymous user ID to manage your subscription status. We do not receive any personally identifiable information from this process. For more details, please see the RevenueCat privacy policy.
 
 ## Your Consent
 
