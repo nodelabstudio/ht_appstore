@@ -74,6 +74,48 @@ class ChallengeRepository {
     return updatedChallenge;
   }
 
+  /// Toggle completion for a specific date
+  Future<Challenge> toggleCompletion(String challengeId, DateTime date) async {
+    final challenge = await _hiveService.getChallenge(challengeId);
+    if (challenge == null) {
+      throw Exception('Challenge not found: $challengeId');
+    }
+
+    final normalizedDate = DateTime.utc(date.year, date.month, date.day);
+
+    final updatedCompletions = [...challenge.completionDatesUtc];
+
+    int? existingTimestamp;
+    for (final ts in updatedCompletions) {
+        final completionDate = DateTime.fromMillisecondsSinceEpoch(ts * 1000, isUtc: true);
+        if (completionDate.year == normalizedDate.year &&
+            completionDate.month == normalizedDate.month &&
+            completionDate.day == normalizedDate.day) {
+            existingTimestamp = ts;
+            break;
+        }
+    }
+
+    if (existingTimestamp != null) {
+        updatedCompletions.remove(existingTimestamp);
+    } else {
+        // Ensure we don't add completions in the future
+        final today = DateTime.now().toUtc();
+        final todayNormalized = DateTime.utc(today.year, today.month, today.day);
+        if(normalizedDate.isAfter(todayNormalized)) {
+          return challenge; // Do nothing for future dates
+        }
+        updatedCompletions.add(normalizedDate.millisecondsSinceEpoch ~/ 1000);
+    }
+    
+    final updatedChallenge = challenge.copyWith(
+      completionDatesUtc: updatedCompletions,
+    );
+
+    await _hiveService.saveChallenge(updatedChallenge);
+    return updatedChallenge;
+  }
+
   /// Undo completion for today (same day only)
   /// Returns updated challenge, or null if no completion to undo
   Future<Challenge?> undoTodayCompletion(String challengeId) async {

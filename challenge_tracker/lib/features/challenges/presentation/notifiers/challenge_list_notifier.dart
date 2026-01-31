@@ -86,6 +86,16 @@ class ChallengeListNotifier extends AsyncNotifier<List<Challenge>> {
     });
   }
 
+  /// Toggle completion for a specific date
+  Future<void> toggleCompletion(String challengeId, DateTime date) async {
+    state = await AsyncValue.guard(() async {
+      final repository = ref.read(challengeRepositoryProvider);
+      final updatedChallenge = await repository.toggleCompletion(challengeId, date);
+      await _updateWidgetWithChallenge(updatedChallenge);
+      return await repository.getAllChallenges();
+    });
+  }
+
   /// Mark challenge complete for today
   Future<void> markComplete(String challengeId) async {
     state = await AsyncValue.guard(() async {

@@ -4,10 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz; // Import for tz.TZDateTime
-import 'package:challenge_tracker/core/utils/streak_calculator.dart';
 import 'package:challenge_tracker/features/challenges/data/models/challenge.dart';
 import 'package:challenge_tracker/features/challenges/presentation/notifiers/challenge_list_notifier.dart';
-import 'package:challenge_tracker/features/stats/data/challenge_statistics_provider.dart';
 import 'package:challenge_tracker/features/stats/presentation/screens/stats_screen.dart';
 
 void main() {

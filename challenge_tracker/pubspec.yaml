@@ -26,6 +26,8 @@ dependencies:
   url_launcher: ^6.2.0
   package_info_plus: ^8.0.0
   gap: ^3.0.1
+  table_calendar: ^3.0.9
+  confetti: ^0.7.0
 
 dev_dependencies:
   flutter_test:

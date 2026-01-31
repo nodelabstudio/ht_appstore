@@ -250,12 +250,13 @@ class _ChallengeCreationScreenState
   Future<void> _selectDate() async {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
+    final thirtyDaysAgo = today.subtract(const Duration(days: 30));
     final oneYearFromNow = today.add(const Duration(days: 365));
 
     final picked = await showDatePicker(
       context: context,
-      initialDate: _startDate.isBefore(today) ? today : _startDate,
-      firstDate: today,
+      initialDate: _startDate,
+      firstDate: thirtyDaysAgo,
       lastDate: oneYearFromNow,
       helpText: 'Select Start Date',
     );

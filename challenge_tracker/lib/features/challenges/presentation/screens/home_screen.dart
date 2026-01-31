@@ -70,9 +70,12 @@ class HomeScreen extends ConsumerWidget {
               crossAxisSpacing: 16,
               childAspectRatio: 1.0, // Square tiles
               children: challenges.map((challenge) {
-                return ChallengeGridItem(
-                  challenge: challenge,
-                  onTap: () => _navigateToChallengeDetail(context, challenge.id),
+                return GestureDetector(
+                  onLongPress: () => _showDeleteConfirmation(context, ref, challenge.id),
+                  child: ChallengeGridItem(
+                    challenge: challenge,
+                    onTap: () => _navigateToChallengeDetail(context, challenge.id),
+                  ),
                 );
               }).toList(),
             ),
@@ -90,6 +93,36 @@ class HomeScreen extends ConsumerWidget {
       ),
     );
   }
+
+  void _showDeleteConfirmation(BuildContext context, WidgetRef ref, String challengeId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Challenge'),
+          content: const Text('Are you sure you want to delete this challenge? This action cannot be undone.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Delete',
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+              onPressed: () {
+                ref.read(challengeListProvider.notifier).deleteChallenge(challengeId);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+   }
 
   Widget _buildErrorState(BuildContext context, WidgetRef ref, Object error) {
     final theme = Theme.of(context);
@@ -140,8 +173,6 @@ class HomeScreen extends ConsumerWidget {
   /// Free users with 1+ active challenges see paywall.
   /// Pro users and free users with 0 active challenges navigate to pack selection.
   Future<void> _navigateToAddChallenge(BuildContext context, WidgetRef ref) async {
-    const bool _inDebugMode = true; // Temporary flag for development
-
     // Read current challenges to count active ones
     final challenges = ref.read(challengeListProvider).valueOrNull ?? [];
     final activeCount = challenges.where((c) => c.progress < 1.0).length;
@@ -150,7 +181,7 @@ class HomeScreen extends ConsumerWidget {
     final isPro = ref.read(subscriptionProvider).valueOrNull ?? false;
 
     // Check if user hits free tier limit
-    if (!_inDebugMode && activeCount >= MonetizationConstants.freeActiveChallengeLimit && !isPro) {
+    if (activeCount >= MonetizationConstants.freeActiveChallengeLimit && !isPro) {
       // Show RevenueCat native paywall
       await RevenueCatUI.presentPaywallIfNeeded(
         MonetizationConstants.proEntitlementId,

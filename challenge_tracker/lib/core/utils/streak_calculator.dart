@@ -7,30 +7,29 @@ class StreakCalculator {
     if (completionTimestampsUtc.isEmpty) return 0;
 
     final location = tz.local;
-    final now = tz.TZDateTime.now(location);
-    final todayDate = _stripTime(now);
-
-    // Convert UTC timestamps to local dates (as unique set)
     final completionDates = completionTimestampsUtc
         .map((utc) => _utcTimestampToLocalDate(utc, location))
         .toSet();
 
-    // Grace period: check completion today or yesterday
-    final yesterdayDate = todayDate.subtract(const Duration(days: 1));
+    final now = tz.TZDateTime.now(location);
+    final today = _stripTime(now);
+    final yesterday = today.subtract(const Duration(days: 1));
 
-    // If not completed today AND not completed yesterday, streak is broken
-    if (!completionDates.contains(todayDate) &&
-        !completionDates.contains(yesterdayDate)) {
-      return 0;
+    tz.TZDateTime? streakAnchorDate;
+    if (completionDates.contains(today)) {
+      streakAnchorDate = today;
+    } else if (completionDates.contains(yesterday)) {
+      streakAnchorDate = yesterday;
+    } else {
+      return 0; // No active streak
     }
 
-    // Count consecutive days backwards from most recent completion
     int streak = 0;
-    var checkDate = completionDates.contains(todayDate) ? todayDate : yesterdayDate;
+    var checkDate = streakAnchorDate;
+    final challengeStartDate = _utcTimestampToLocalDate(startDateUtc, location);
 
-    final startDate = _utcTimestampToLocalDate(startDateUtc, location);
-
-    while (completionDates.contains(checkDate) && !checkDate.isBefore(startDate)) {
+    while (completionDates.contains(checkDate) &&
+           !checkDate.isBefore(challengeStartDate)) {
       streak++;
       checkDate = checkDate.subtract(const Duration(days: 1));
     }
@@ -86,34 +85,29 @@ class StreakCalculator {
     final completionDates = completionTimestampsUtc
         .map((utc) => _utcTimestampToLocalDate(utc, location))
         .toSet() // Use set to handle duplicate completions on same day
+        .where((date) => !date.isBefore(startDate)) // Ignore completions before the start date
         .toList()
-        ..sort((a, b) => a.compareTo(b));
+      ..sort((a, b) => a.compareTo(b));
 
-    int bestStreak = 0;
-    int currentStreak = 0;
-    tz.TZDateTime? lastCompletionDate;
+    if (completionDates.isEmpty) {
+      return 0;
+    }
 
-    for (final date in completionDates) {
-      if (date.isBefore(startDate)) {
-        continue; // Ignore completions before the start date
-      }
+    int bestStreak = 1;
+    int currentStreak = 1;
 
-      if (lastCompletionDate == null) {
-        // First completion in sequence
+    for (int i = 1; i < completionDates.length; i++) {
+      final difference = completionDates[i].difference(completionDates[i - 1]);
+      if (difference.inDays == 1) {
+        currentStreak++;
+      } else if (difference.inDays > 1) {
         currentStreak = 1;
-      } else {
-        final difference = date.difference(lastCompletionDate);
-        if (difference.inDays == 1) {
-          // Consecutive day
-          currentStreak++;
-        } else if (difference.inDays > 1) {
-          // Gap, reset streak
-          currentStreak = 1;
-        }
-        // If difference.inDays == 0, it's the same day, no change to streak
       }
-      bestStreak = currentStreak > bestStreak ? currentStreak : bestStreak;
-      lastCompletionDate = date;
+      // If difference is 0, it's the same day, so streak doesn't change
+
+      if (currentStreak > bestStreak) {
+        bestStreak = currentStreak;
+      }
     }
 
     return bestStreak;

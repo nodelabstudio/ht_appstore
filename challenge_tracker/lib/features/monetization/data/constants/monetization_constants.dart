@@ -6,7 +6,7 @@ class MonetizationConstants {
 
   /// RevenueCat Apple API key from RevenueCat Dashboard -> Project -> API Keys
   /// Replace with your actual key from the dashboard.
-  static const appleApiKey = 'appl_REPLACE_WITH_YOUR_KEY';
+  static const appleApiKey = 'appl_YOUR_RC_APPLE_API_KEY';
 
   /// RevenueCat entitlement identifier for Pro subscription.
   /// Must match entitlement created in RevenueCat Dashboard -> Entitlements.
@@ -26,13 +26,15 @@ class MonetizationConstants {
 
   /// Privacy policy URL shown in paywall and settings.
   /// Replace with your actual privacy policy URL.
-  static const privacyPolicyUrl = 'https://www.privacypolicies.com/';
+  static const privacyPolicyUrl =
+      'https://nodelabstudio.github.io/ht_appstore/privacy-policy.html';
 
   /// Terms of service URL shown in paywall and settings.
   /// Replace with your actual terms of service URL.
-  static const termsOfServiceUrl = 'https://www.privacypolicies.com/';
+  static const termsOfServiceUrl =
+      'https://nodelabstudio.github.io/ht_appstore/terms.html';
 
   /// Support email for user inquiries.
   /// Replace with your actual support email address.
-  static const supportEmail = 'support@yourapp.com';
+  static const supportEmail = 'quest30@use.startmail.com';
 }

@@ -67,6 +67,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not find an email client to open.'),
+          ),
+        );
+      }
     }
   }
 
@@ -144,18 +152,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: const Text('Restore Purchases'),
             onTap: _restorePurchases,
           ),
+          const Divider(),
           ListTile(
-            leading: const Icon(Icons.email),
+            leading: const Icon(Icons.email_outlined),
             title: const Text('Contact Support'),
+            subtitle: const Text(MonetizationConstants.supportEmail),
             onTap: _launchEmail,
           ),
           ListTile(
-            leading: const Icon(Icons.description),
+            leading: const Icon(Icons.privacy_tip_outlined),
             title: const Text('Privacy Policy'),
             onTap: _launchPrivacyPolicy,
           ),
           ListTile(
-            leading: const Icon(Icons.assignment),
+            leading: const Icon(Icons.description_outlined),
             title: const Text('Terms of Service'),
             onTap: _launchTermsOfService,
           ),
@@ -163,7 +173,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ListTile(
             leading: const Icon(Icons.info_outline),
             title: const Text('Version'),
-            subtitle: Text(_appVersion), // Use the dynamically loaded version
+            subtitle: Text(_appVersion.isEmpty ? '...' : _appVersion),
           ),
         ],
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:confetti/confetti.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../core/utils/date_utils.dart';
 import '../../../../core/utils/streak_calculator.dart';
@@ -8,8 +10,7 @@ import '../../data/models/challenge_pack.dart';
 import '../notifiers/challenge_list_notifier.dart';
 
 /// Challenge detail screen showing progress, streak, and completion controls.
-/// Implements CHAL-05, COMP-01, COMP-03 from requirements.
-class ChallengeDetailScreen extends ConsumerWidget {
+class ChallengeDetailScreen extends ConsumerStatefulWidget {
   final String challengeId;
 
   const ChallengeDetailScreen({
@@ -18,122 +19,228 @@ class ChallengeDetailScreen extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final challenge = ref.watch(challengeByIdProvider(challengeId));
+  ConsumerState<ChallengeDetailScreen> createState() =>
+      _ChallengeDetailScreenState();
+}
+
+class _ChallengeDetailScreenState extends ConsumerState<ChallengeDetailScreen> {
+  late ConfettiController _confettiController;
+  late DateTime _focusedDay;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 1));
+    _focusedDay = DateTime.now();
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    if (!isSameDay(_focusedDay, selectedDay)) {
+      setState(() {
+        _focusedDay = focusedDay;
+      });
+    }
+    // Toggle completion for the selected date
+    ref
+        .read(challengeListProvider.notifier)
+        .toggleCompletion(widget.challengeId, selectedDay);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final challenge = ref.watch(challengeByIdProvider(widget.challengeId));
 
     if (challenge == null) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Challenge'),
-        ),
-        body: const Center(
-          child: Text('Challenge not found'),
-        ),
+        appBar: AppBar(title: const Text('Challenge')),
+        body: const Center(child: Text('Challenge not found')),
       );
     }
 
     final pack = ChallengePack.getById(challenge.packId);
     final emoji = pack?.emoji ?? '?';
-    final isCompletedToday = StreakCalculator.isCompletedToday(
-      challenge.completionDatesUtc,
-    );
+    final isCompletedToday =
+        StreakCalculator.isCompletedToday(challenge.completionDatesUtc);
     final currentStreak = StreakCalculator.calculateStreak(
       challenge.completionDatesUtc,
       challenge.startDateUtc,
     );
     final startDateFormatted = AppDateUtils.formatDate(challenge.startDateUtc);
+    final completionDates = challenge.completionDatesUtc
+        .map((ts) =>
+            DateTime.fromMillisecondsSinceEpoch(ts * 1000, isUtc: true))
+        .toSet();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(challenge.name),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Pack emoji - large
-              Text(
-                emoji,
-                style: const TextStyle(fontSize: 64),
-              ),
-              const SizedBox(height: 24),
-
-              // Large progress ring (200px)
-              CircularPercentIndicator(
-                radius: 100.0,
-                lineWidth: 12.0,
-                percent: challenge.progress.clamp(0.0, 1.0),
-                center: Text(
-                  '${challenge.completedDays}/30',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                progressColor: isCompletedToday
-                    ? Colors.green
-                    : Theme.of(context).colorScheme.primary,
-                backgroundColor: Colors.grey.shade200,
-                circularStrokeCap: CircularStrokeCap.round,
-                animation: true,
-                animationDuration: 500,
-              ),
-              const SizedBox(height: 24),
-
-              // Day X of 30
-              Text(
-                'Day ${challenge.currentDay} of 30',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 8),
-
-              // Streak count
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Icon(Icons.local_fire_department, color: Colors.orange),
-                  const SizedBox(width: 8),
+                  // Pack emoji - large
                   Text(
-                    '$currentStreak day streak',
-                    style: Theme.of(context).textTheme.titleMedium,
+                    emoji,
+                    style: const TextStyle(fontSize: 64),
                   ),
+                  const SizedBox(height: 24),
+                  _buildCalendar(
+                      context,
+                      DateTime.fromMillisecondsSinceEpoch(
+                          challenge.startDateUtc * 1000),
+                      completionDates),
+                  const Divider(height: 32),
+                  // Large progress ring (200px)
+                  CircularPercentIndicator(
+                    radius: 100.0,
+                    lineWidth: 12.0,
+                    percent: challenge.progress.clamp(0.0, 1.0),
+                    center: Text(
+                      '${challenge.completedDays}/30',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    progressColor: isCompletedToday
+                        ? Colors.green
+                        : Theme.of(context).colorScheme.primary,
+                    backgroundColor: Colors.grey.shade200,
+                    circularStrokeCap: CircularStrokeCap.round,
+                    animation: true,
+                    animationDuration: 500,
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Day X of 30
+                  Text(
+                    'Day ${challenge.currentDay} of 30',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Streak count
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.local_fire_department),
+                      const SizedBox(width: 8),
+                      Text(
+                        '$currentStreak day streak',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+
+                  // Start date
+                  Text(
+                    'Started $startDateFormatted',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey,
+                        ),
+                  ),
+                  // Reminder toggle
+                  const Divider(height: 32),
+                  _ReminderToggle(
+                    challengeId: widget.challengeId,
+                    reminderTimeMinutes: challenge.reminderTimeMinutes,
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Completion state and controls
+                  if (isCompletedToday) ...[
+                    // Completed today state
+                    _CompletedTodayBadge(),
+                    const SizedBox(height: 16),
+                    _UndoButton(
+                      challengeId: widget.challengeId,
+                      onUndo: () => _handleUndo(context, ref),
+                    ),
+                  ] else ...[
+                    // Not completed - show Done button
+                    _DoneButton(
+                      challengeId: widget.challengeId,
+                      onDone: () => _handleMarkComplete(context, ref),
+                    ),
+                  ],
                 ],
               ),
-              const SizedBox(height: 8),
-
-              // Start date
-              Text(
-                'Started $startDateFormatted',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey,
-                    ),
-              ),
-              // Reminder toggle
-              const Divider(height: 32),
-              _ReminderToggle(
-                challengeId: challengeId,
-                reminderTimeMinutes: challenge.reminderTimeMinutes,
-              ),
-              const SizedBox(height: 16),
-
-              // Completion state and controls
-              if (isCompletedToday) ...[
-                // Completed today state
-                _CompletedTodayBadge(),
-                const SizedBox(height: 16),
-                _UndoButton(
-                  challengeId: challengeId,
-                  onUndo: () => _handleUndo(context, ref),
-                ),
-              ] else ...[
-                // Not completed - show Done button
-                _DoneButton(
-                  challengeId: challengeId,
-                  onDone: () => _handleMarkComplete(context, ref),
-                ),
-              ],
+            ),
+          ),
+          ConfettiWidget(
+            confettiController: _confettiController,
+            blastDirectionality: BlastDirectionality.explosive,
+            shouldLoop: false,
+            colors: const [
+              Colors.green,
+              Colors.blue,
+              Colors.pink,
+              Colors.orange,
+              Colors.purple
             ],
+            createParticlePath: (size) =>
+                Path()..addOval(Rect.fromCircle(center: Offset.zero, radius: 5)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCalendar(
+      BuildContext context, DateTime startDate, Set<DateTime> completionDates) {
+    return TableCalendar(
+      firstDay: startDate,
+      lastDay: DateTime.now().add(const Duration(days: 1)),
+      focusedDay: _focusedDay,
+      calendarFormat: CalendarFormat.month,
+      headerStyle: HeaderStyle(
+        titleCentered: true,
+        formatButtonVisible: false,
+        titleTextStyle:
+            Theme.of(context).textTheme.titleMedium ?? const TextStyle(),
+      ),
+      selectedDayPredicate: (day) {
+        return completionDates.any((completion) => isSameDay(completion, day));
+      },
+      onDaySelected: _onDaySelected,
+      calendarBuilders: CalendarBuilders(
+        selectedBuilder: (context, date, events) => Container(
+          margin: const EdgeInsets.all(4.0),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            shape: BoxShape.circle,
+          ),
+          child: Text(
+            date.day.toString(),
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        todayBuilder: (context, date, events) => Container(
+          margin: const EdgeInsets.all(4.0),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+                color: Theme.of(context).colorScheme.primary, width: 2),
+          ),
+          child: Text(
+            date.day.toString(),
+            style:
+                TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
           ),
         ),
       ),
@@ -142,7 +249,17 @@ class ChallengeDetailScreen extends ConsumerWidget {
 
   Future<void> _handleMarkComplete(BuildContext context, WidgetRef ref) async {
     try {
-      await ref.read(challengeListProvider.notifier).markComplete(challengeId);
+      await ref
+          .read(challengeListProvider.notifier)
+          .markComplete(widget.challengeId);
+      final updatedChallenge =
+          ref.read(challengeByIdProvider(widget.challengeId));
+
+      if (updatedChallenge != null &&
+          updatedChallenge.progress.clamp(0.0, 1.0) >= 1.0) {
+        _confettiController.play();
+      }
+
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -168,7 +285,7 @@ class ChallengeDetailScreen extends ConsumerWidget {
     try {
       await ref
           .read(challengeListProvider.notifier)
-          .undoTodayCompletion(challengeId);
+          .undoTodayCompletion(widget.challengeId);
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
