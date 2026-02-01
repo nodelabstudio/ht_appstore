@@ -43,14 +43,14 @@ void main() async {
   );
 }
 
-class ChallengeTrackerApp extends StatefulWidget {
+class ChallengeTrackerApp extends ConsumerStatefulWidget {
   const ChallengeTrackerApp({super.key});
 
   @override
-  State<ChallengeTrackerApp> createState() => _ChallengeTrackerAppState();
+  ConsumerState<ChallengeTrackerApp> createState() => _ChallengeTrackerAppState();
 }
 
-class _ChallengeTrackerAppState extends State<ChallengeTrackerApp> {
+class _ChallengeTrackerAppState extends ConsumerState<ChallengeTrackerApp> {
   @override
   void initState() {
     super.initState();
@@ -93,6 +93,8 @@ class _ChallengeTrackerAppState extends State<ChallengeTrackerApp> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeProvider);
+
     return MaterialApp(
       navigatorKey: navigatorKey,
       title: '30-Day Challenge',
@@ -111,7 +113,7 @@ class _ChallengeTrackerAppState extends State<ChallengeTrackerApp> {
         ),
         useMaterial3: true,
       ),
-      themeMode: ThemeMode.system,
+      themeMode: themeMode,
       home: const HomeScreen(),
     );
   }

@@ -135,7 +135,13 @@ class _ChallengeDetailScreenState extends ConsumerState<ChallengeDetailScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(Icons.local_fire_department),
+                      Text(
+                        '\uE0E6', // Unicode for Icons.local_fire_department
+                        style: TextStyle(
+                          fontFamily: 'MaterialIcons',
+                          fontSize: 24, // Adjust size as needed
+                        ),
+                      ),
                       const SizedBox(width: 8),
                       Text(
                         '$currentStreak day streak',

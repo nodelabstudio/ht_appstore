@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import '../../../notifications/data/services/notification_service.dart';
 import '../../../monetization/data/constants/monetization_constants.dart';
+import '../providers/theme_provider.dart';
 
-/// Settings screen with notification toggle, restore purchases,
+/// Settings screen with theme toggle, notification toggle, restore purchases,
 /// support, legal links, and dynamic version.
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   late bool _notificationsEnabled;
   String _appVersion = '';
 
@@ -94,6 +96,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -101,6 +105,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       body: ListView(
         children: [
+          const ListTile(
+            title: Text('Appearance'),
+            dense: true,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SegmentedButton<ThemeMode>(
+              segments: const [
+                ButtonSegment(
+                  value: ThemeMode.light,
+                  label: Text('Light'),
+                  icon: Icon(Icons.light_mode_outlined),
+                ),
+                ButtonSegment(
+                  value: ThemeMode.dark,
+                  label: Text('Dark'),
+                  icon: Icon(Icons.dark_mode_outlined),
+                ),
+                ButtonSegment(
+                  value: ThemeMode.system,
+                  label: Text('System'),
+                  icon: Icon(Icons.settings_system_daydream_outlined),
+                ),
+              ],
+              selected: {themeMode},
+              onSelectionChanged: (newSelection) {
+                ref.read(themeProvider.notifier).setThemeMode(newSelection.first);
+              },
+            ),
+          ),
+          const Divider(),
           SwitchListTile(
             title: const Text('Notifications'),
             subtitle: Text(
@@ -131,11 +166,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
               } else {
                 NotificationService().setGlobalEnabled(true);
-                // Note: When notifications are re-enabled globally,
-                // challenges with set reminder times will need to be
-                // rescheduled. This is implicitly handled when challenges are
-                // next modified or completed, or explicitly if we add a
-                // "reschedule all" button. For now, rely on individual challenge updates.
                 messenger.showSnackBar(
                   const SnackBar(
                     content: Text(

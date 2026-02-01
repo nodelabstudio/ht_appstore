@@ -65,8 +65,19 @@ ht_appstore/
 ## Running the App
 
 ```bash
-cd ht_appstore
+cd challenge_tracker
 flutter pub get
+flutter run
+```
+
+## Development Shortcuts
+
+```bash
+# Boot the iPhone 16 Pro simulator
+xcrun simctl boot "iPhone 16 Pro"
+
+# Run the app on the active simulator
+cd challenge_tracker
 flutter run
 ```
 
