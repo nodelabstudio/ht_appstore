@@ -4,6 +4,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
+import 'features/challenges/presentation/notifiers/challenge_list_notifier.dart';
+import 'features/settings/presentation/providers/theme_provider.dart';
 import 'features/challenges/data/services/hive_service.dart';
 import 'features/challenges/presentation/screens/challenge_detail_screen.dart';
 import 'features/challenges/presentation/screens/home_screen.dart';
@@ -51,6 +53,9 @@ class ChallengeTrackerApp extends ConsumerStatefulWidget {
 }
 
 class _ChallengeTrackerAppState extends ConsumerState<ChallengeTrackerApp> {
+  Uri? _initialUri;
+  bool _initialUriHandled = false;
+
   @override
   void initState() {
     super.initState();
@@ -59,10 +64,13 @@ class _ChallengeTrackerAppState extends ConsumerState<ChallengeTrackerApp> {
   }
 
   /// Check if the app was initially launched from a home screen widget tap.
+  /// Stores the URI to be handled by the build method once data is loaded.
   Future<void> _handleWidgetLaunch() async {
     final launchUri = await HomeWidget.initiallyLaunchedFromHomeWidget();
     if (launchUri != null) {
-      _navigateFromWidgetUri(launchUri);
+      setState(() {
+        _initialUri = launchUri;
+      });
     }
   }
 
@@ -80,7 +88,7 @@ class _ChallengeTrackerAppState extends ConsumerState<ChallengeTrackerApp> {
   void _navigateFromWidgetUri(Uri uri) {
     if (uri.scheme == 'challengetracker' && uri.host == 'challenge') {
       final pathSegments = uri.pathSegments;
-      if (pathSegments.isNotEmpty) {
+      if (pathSegments.isNotEmpty && pathSegments.first.isNotEmpty) {
         final challengeId = pathSegments.first;
         navigatorKey.currentState?.push(
           MaterialPageRoute(
@@ -94,6 +102,16 @@ class _ChallengeTrackerAppState extends ConsumerState<ChallengeTrackerApp> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeProvider);
+
+    // Use ref.listen to handle the one-time navigation event when data loads.
+    // This is the correct way to trigger side-effects in response to state changes.
+    ref.listen(challengeListProvider, (previous, next) {
+      // Only handle initial URI once, and only when challenges are first loaded.
+      if (_initialUri != null && !_initialUriHandled && next.hasValue) {
+        _navigateFromWidgetUri(_initialUri!);
+        _initialUriHandled = true;
+      }
+    });
 
     return MaterialApp(
       navigatorKey: navigatorKey,
