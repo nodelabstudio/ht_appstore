@@ -117,6 +117,18 @@ class _ChallengeTrackerAppState extends ConsumerState<ChallengeTrackerApp> {
       navigatorKey: navigatorKey,
       title: '30-Day Challenge',
       debugShowCheckedModeBanner: false,
+      // Handle deep links manually via HomeWidget, suppress Flutter's built-in routing errors
+      onGenerateRoute: (settings) {
+        // Deep link URLs are handled by HomeWidget.widgetClicked, return home screen
+        if (settings.name?.startsWith('challengetracker://') == true) {
+          return MaterialPageRoute(builder: (_) => const HomeScreen());
+        }
+        return null;
+      },
+      onUnknownRoute: (settings) {
+        // Catch-all for any unhandled routes, return home screen
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
+      },
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,

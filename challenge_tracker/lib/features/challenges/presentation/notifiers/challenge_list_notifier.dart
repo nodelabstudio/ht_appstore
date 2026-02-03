@@ -17,7 +17,14 @@ class ChallengeListNotifier extends AsyncNotifier<List<Challenge>> {
   Future<List<Challenge>> build() async {
     // Initial load from repository
     final repository = ref.read(challengeRepositoryProvider);
-    return await repository.getAllChallenges();
+    final challenges = await repository.getAllChallenges();
+
+    // Sync widget with most recent challenge on startup
+    if (challenges.isNotEmpty) {
+      await _updateWidgetWithChallenge(challenges.first);
+    }
+
+    return challenges;
   }
 
   /// Update widget with current challenge data.
