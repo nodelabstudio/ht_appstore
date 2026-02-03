@@ -4,9 +4,9 @@
 class MonetizationConstants {
   MonetizationConstants._();
 
-  /// RevenueCat Apple API key from RevenueCat Dashboard -> Project -> API Keys
-  /// Replace with your actual key from the dashboard.
-  static const appleApiKey = 'appl_YOUR_RC_APPLE_API_KEY';
+  /// RevenueCat Apple API key, injected at build time via --dart-define.
+  /// See BUILD.md for usage instructions.
+  static const appleApiKey = String.fromEnvironment('RC_API_KEY');
 
   /// RevenueCat entitlement identifier for Pro subscription.
   /// Must match entitlement created in RevenueCat Dashboard -> Entitlements.

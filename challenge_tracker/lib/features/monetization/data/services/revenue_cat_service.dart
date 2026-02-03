@@ -22,10 +22,14 @@ class RevenueCatService {
     // Enable debug logging for development
     await Purchases.setLogLevel(LogLevel.debug);
 
-    // Configure with Apple API key
-    final configuration = PurchasesConfiguration(
-      MonetizationConstants.appleApiKey,
-    );
+    // Configure with Apple API key (injected via --dart-define=RC_API_KEY=...)
+    final apiKey = MonetizationConstants.appleApiKey;
+    if (apiKey.isEmpty) {
+      throw StateError(
+        'RC_API_KEY not set. Build with: flutter run --dart-define=RC_API_KEY=appl_yourkey',
+      );
+    }
+    final configuration = PurchasesConfiguration(apiKey);
     await Purchases.configure(configuration);
 
     _isInitialized = true;
