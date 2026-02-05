@@ -28,6 +28,12 @@ class ThemeModeNotifier extends StateNotifier<ThemeMode> {
       await _prefs.setString(_themeModeKey, themeMode.toString());
     }
   }
+
+  /// Reset theme to system default and clear stored preference.
+  Future<void> reset() async {
+    state = ThemeMode.system;
+    await _prefs.remove(_themeModeKey);
+  }
 }
 
 // Provider for SharedPreferences
@@ -88,7 +94,10 @@ class InMemorySharedPreferences implements SharedPreferences {
   @override
   Future<void> reload() => throw UnimplementedError();
   @override
-  Future<bool> remove(String key) => throw UnimplementedError();
+  Future<bool> remove(String key) {
+    _data.remove(key);
+    return Future.value(true);
+  }
   @override
   Future<bool> setBool(String key, bool value) => throw UnimplementedError();
   @override

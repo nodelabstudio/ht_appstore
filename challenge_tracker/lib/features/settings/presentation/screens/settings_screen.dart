@@ -4,8 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../../notifications/data/services/notification_service.dart';
 import '../../../monetization/data/constants/monetization_constants.dart';
+import '../../../challenges/data/services/hive_service.dart';
+import '../../../challenges/presentation/notifiers/challenge_list_notifier.dart';
 import '../providers/theme_provider.dart';
 
 /// Settings screen with theme toggle, notification toggle, restore purchases,
@@ -91,6 +94,63 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final uri = Uri.parse(MonetizationConstants.termsOfServiceUrl);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> _deleteAccount() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Account'),
+        content: const Text(
+          'This will permanently delete all your data including:\n\n'
+          '• All challenges and progress\n'
+          '• Streak history\n'
+          '• App settings\n\n'
+          'This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    final messenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
+    try {
+      // Cancel all notifications
+      await NotificationService().cancelAllNotifications();
+
+      // Delete all Hive data
+      await Hive.deleteBoxFromDisk(HiveService.challengesBoxName);
+
+      // Clear theme preference
+      await ref.read(themeProvider.notifier).reset();
+
+      // Invalidate challenge list to reflect empty state
+      ref.invalidate(challengeListProvider);
+
+      messenger.showSnackBar(
+        const SnackBar(content: Text('All data deleted successfully.')),
+      );
+
+      // Pop back to home screen
+      navigator.popUntil((route) => route.isFirst);
+    } catch (e) {
+      messenger.showSnackBar(
+        SnackBar(content: Text('Failed to delete data: $e')),
+      );
     }
   }
 
@@ -205,6 +265,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             title: const Text('Version'),
             subtitle: Text(_appVersion.isEmpty ? '...' : _appVersion),
           ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.delete_forever, color: Colors.red),
+            title: const Text(
+              'Delete Account',
+              style: TextStyle(color: Colors.red),
+            ),
+            subtitle: const Text('Permanently delete all your data'),
+            onTap: _deleteAccount,
+          ),
+          const SizedBox(height: 32),
         ],
       ),
     );
