@@ -61,8 +61,10 @@ class ChallengeRepository {
       return challenge; // Already done, no-op
     }
 
-    // Add today's completion
-    final utcTimestamp = StreakCalculator.getCurrentUtcTimestamp();
+    // Store local date as UTC midnight timestamp
+    // e.g., Feb 5 local becomes "Feb 5 00:00:00 UTC" regardless of timezone
+    final now = DateTime.now(); // Local time
+    final utcTimestamp = DateTime.utc(now.year, now.month, now.day).millisecondsSinceEpoch ~/ 1000;
     final updatedCompletions = [...challenge.completionDatesUtc, utcTimestamp];
 
     final updatedChallenge = challenge.copyWith(
@@ -75,39 +77,52 @@ class ChallengeRepository {
   }
 
   /// Toggle completion for a specific date
+  /// The date parameter is expected to be in local time (from calendar)
   Future<Challenge> toggleCompletion(String challengeId, DateTime date) async {
     final challenge = await _hiveService.getChallenge(challengeId);
     if (challenge == null) {
       throw Exception('Challenge not found: $challengeId');
     }
 
+    // Store local date as UTC midnight (e.g., Feb 5 local -> "Feb 5 00:00:00 UTC")
     final normalizedDate = DateTime.utc(date.year, date.month, date.day);
+
+    // Get challenge start date (normalized to UTC midnight)
+    final startDateTime = DateTime.fromMillisecondsSinceEpoch(
+      challenge.startDateUtc * 1000, isUtc: true);
+    final startDate = DateTime.utc(startDateTime.year, startDateTime.month, startDateTime.day);
+
+    // Validate: Don't allow completions before challenge start date
+    if (normalizedDate.isBefore(startDate)) {
+      return challenge; // No-op for dates before start
+    }
 
     final updatedCompletions = [...challenge.completionDatesUtc];
 
+    // Check if this date already has a completion (compare UTC date components)
     int? existingTimestamp;
     for (final ts in updatedCompletions) {
-        final completionDate = DateTime.fromMillisecondsSinceEpoch(ts * 1000, isUtc: true);
-        if (completionDate.year == normalizedDate.year &&
-            completionDate.month == normalizedDate.month &&
-            completionDate.day == normalizedDate.day) {
-            existingTimestamp = ts;
-            break;
-        }
+      final completionDate = DateTime.fromMillisecondsSinceEpoch(ts * 1000, isUtc: true);
+      if (completionDate.year == normalizedDate.year &&
+          completionDate.month == normalizedDate.month &&
+          completionDate.day == normalizedDate.day) {
+        existingTimestamp = ts;
+        break;
+      }
     }
 
     if (existingTimestamp != null) {
-        updatedCompletions.remove(existingTimestamp);
+      updatedCompletions.remove(existingTimestamp);
     } else {
-        // Ensure we don't add completions in the future
-        final today = DateTime.now().toUtc();
-        final todayNormalized = DateTime.utc(today.year, today.month, today.day);
-        if(normalizedDate.isAfter(todayNormalized)) {
-          return challenge; // Do nothing for future dates
-        }
-        updatedCompletions.add(normalizedDate.millisecondsSinceEpoch ~/ 1000);
+      // Ensure we don't add completions in the future (compare local dates)
+      final now = DateTime.now();
+      final todayUtc = DateTime.utc(now.year, now.month, now.day);
+      if (normalizedDate.isAfter(todayUtc)) {
+        return challenge; // Do nothing for future dates
+      }
+      updatedCompletions.add(normalizedDate.millisecondsSinceEpoch ~/ 1000);
     }
-    
+
     final updatedChallenge = challenge.copyWith(
       completionDatesUtc: updatedCompletions,
     );
