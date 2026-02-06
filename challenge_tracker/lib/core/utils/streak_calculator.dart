@@ -1,21 +1,23 @@
-import 'package:timezone/timezone.dart' as tz;
-
 class StreakCalculator {
   /// Calculate current streak from UTC timestamps
-  /// Handles timezone changes and DST transitions
+  /// Uses local dates stored as UTC midnight for comparison
   static int calculateStreak(List<int> completionTimestampsUtc, int startDateUtc) {
     if (completionTimestampsUtc.isEmpty) return 0;
 
-    final location = tz.local;
+    // Convert timestamps to UTC date strings for Set comparison
     final completionDates = completionTimestampsUtc
-        .map((utc) => _utcTimestampToLocalDate(utc, location))
+        .map((ts) {
+          final date = DateTime.fromMillisecondsSinceEpoch(ts * 1000, isUtc: true);
+          return DateTime.utc(date.year, date.month, date.day);
+        })
         .toSet();
 
-    final now = tz.TZDateTime.now(location);
-    final today = _stripTime(now);
+    // Get today and yesterday in local time, as UTC dates
+    final now = DateTime.now();
+    final today = DateTime.utc(now.year, now.month, now.day);
     final yesterday = today.subtract(const Duration(days: 1));
 
-    tz.TZDateTime? streakAnchorDate;
+    DateTime? streakAnchorDate;
     if (completionDates.contains(today)) {
       streakAnchorDate = today;
     } else if (completionDates.contains(yesterday)) {
@@ -24,9 +26,12 @@ class StreakCalculator {
       return 0; // No active streak
     }
 
+    // Get challenge start date
+    final startDate = DateTime.fromMillisecondsSinceEpoch(startDateUtc * 1000, isUtc: true);
+    final challengeStartDate = DateTime.utc(startDate.year, startDate.month, startDate.day);
+
     int streak = 0;
     var checkDate = streakAnchorDate;
-    final challengeStartDate = _utcTimestampToLocalDate(startDateUtc, location);
 
     while (completionDates.contains(checkDate) &&
            !checkDate.isBefore(challengeStartDate)) {
@@ -37,17 +42,20 @@ class StreakCalculator {
     return streak;
   }
 
-  /// Check if challenge completed today in user's timezone
+  /// Check if challenge completed today
+  /// Compares local date against stored UTC dates
   static bool isCompletedToday(List<int> completionTimestampsUtc) {
     if (completionTimestampsUtc.isEmpty) return false;
 
-    final location = tz.local;
-    final now = tz.TZDateTime.now(location);
-    final todayDate = _stripTime(now);
+    // Get today's local date, then compare against stored UTC dates
+    final now = DateTime.now();
+    final todayUtc = DateTime.utc(now.year, now.month, now.day);
 
-    return completionTimestampsUtc.any((utc) {
-      final completionDate = _utcTimestampToLocalDate(utc, location);
-      return completionDate == todayDate;
+    return completionTimestampsUtc.any((ts) {
+      final completionDate = DateTime.fromMillisecondsSinceEpoch(ts * 1000, isUtc: true);
+      return completionDate.year == todayUtc.year &&
+             completionDate.month == todayUtc.month &&
+             completionDate.day == todayUtc.day;
     });
   }
 
@@ -55,35 +63,43 @@ class StreakCalculator {
   static int? getTodayCompletionTimestamp(List<int> completionTimestampsUtc) {
     if (completionTimestampsUtc.isEmpty) return null;
 
-    final location = tz.local;
-    final now = tz.TZDateTime.now(location);
-    final todayDate = _stripTime(now);
+    // Get today's local date as UTC for comparison
+    final now = DateTime.now();
+    final todayUtc = DateTime.utc(now.year, now.month, now.day);
 
-    for (final utc in completionTimestampsUtc) {
-      final completionDate = _utcTimestampToLocalDate(utc, location);
-      if (completionDate == todayDate) {
-        return utc;
+    for (final ts in completionTimestampsUtc) {
+      final completionDate = DateTime.fromMillisecondsSinceEpoch(ts * 1000, isUtc: true);
+      if (completionDate.year == todayUtc.year &&
+          completionDate.month == todayUtc.month &&
+          completionDate.day == todayUtc.day) {
+        return ts;
       }
     }
     return null;
   }
 
-  /// Store current completion as UTC timestamp (seconds)
-  static int getCurrentUtcTimestamp() {
-    return DateTime.now().toUtc().millisecondsSinceEpoch ~/ 1000;
+  /// Get today's date as UTC midnight timestamp (seconds)
+  /// Stores local date as UTC midnight for consistency with storage format
+  static int getTodayUtcTimestamp() {
+    final now = DateTime.now();
+    return DateTime.utc(now.year, now.month, now.day).millisecondsSinceEpoch ~/ 1000;
   }
 
   /// Calculate the best (longest) streak from UTC timestamps
-  /// Handles timezone changes and DST transitions
+  /// Uses local dates stored as UTC midnight for comparison
   static int calculateBestStreak(List<int> completionTimestampsUtc, int startDateUtc) {
     if (completionTimestampsUtc.isEmpty) return 0;
 
-    final location = tz.local;
-    final startDate = _utcTimestampToLocalDate(startDateUtc, location);
+    // Get challenge start date
+    final startDateTime = DateTime.fromMillisecondsSinceEpoch(startDateUtc * 1000, isUtc: true);
+    final startDate = DateTime.utc(startDateTime.year, startDateTime.month, startDateTime.day);
 
-    // Convert UTC timestamps to local dates and sort them
+    // Convert UTC timestamps to UTC dates and sort them
     final completionDates = completionTimestampsUtc
-        .map((utc) => _utcTimestampToLocalDate(utc, location))
+        .map((ts) {
+          final date = DateTime.fromMillisecondsSinceEpoch(ts * 1000, isUtc: true);
+          return DateTime.utc(date.year, date.month, date.day);
+        })
         .toSet() // Use set to handle duplicate completions on same day
         .where((date) => !date.isBefore(startDate)) // Ignore completions before the start date
         .toList()
@@ -111,23 +127,5 @@ class StreakCalculator {
     }
 
     return bestStreak;
-  }
-
-
-  /// Convert UTC timestamp to local date (stripped of time)
-  static tz.TZDateTime _utcTimestampToLocalDate(int utcTimestamp, tz.Location location) {
-    final utcDateTime = DateTime.fromMillisecondsSinceEpoch(utcTimestamp * 1000, isUtc: true);
-    final localDateTime = tz.TZDateTime.from(utcDateTime, location);
-    return _stripTime(localDateTime);
-  }
-
-  /// Strip time component, return date-only
-  static tz.TZDateTime _stripTime(tz.TZDateTime dateTime) {
-    return tz.TZDateTime(
-      dateTime.location,
-      dateTime.year,
-      dateTime.month,
-      dateTime.day,
-    );
   }
 }
