@@ -61,12 +61,38 @@ class Challenge extends HiveObject {
     );
   }
 
-  // Computed: number of completions
-  int get completedDays => completionDatesUtc.length;
+  /// Computed: number of unique completed days (not total entries)
+  /// Uses UTC dates for consistency with storage format.
+  /// Deduplicates via Set conversion to handle any legacy duplicate entries.
+  int get completedDays {
+    final uniqueDays = completionDatesUtc
+        .map((ts) {
+          final date = DateTime.fromMillisecondsSinceEpoch(ts * 1000, isUtc: true);
+          return DateTime.utc(date.year, date.month, date.day);
+        })
+        .toSet();
+    return uniqueDays.length;
+  }
 
-  // Computed: progress as fraction (0.0 to 1.0)
+  /// Computed: progress as fraction (0.0 to 1.0)
+  /// Based on unique completed days, not raw completion count.
   double get progress => completedDays / 30.0;
 
-  // Computed: day number (1-30)
-  int get currentDay => completedDays + 1;
+  /// Computed: current day number in the challenge (1-30)
+  /// Based on days elapsed since start date (inclusive).
+  /// Start date = Day 1, next day = Day 2, etc.
+  /// Uses local date normalized to UTC for consistent comparison.
+  int get currentDay {
+    // Denormalize stored start date
+    final start = DateTime.fromMillisecondsSinceEpoch(startDateUtc * 1000, isUtc: true);
+    final startDate = DateTime.utc(start.year, start.month, start.day);
+
+    // Normalize today to UTC
+    final now = DateTime.now();
+    final today = DateTime.utc(now.year, now.month, now.day);
+
+    // Calculate inclusive day count (+1 makes start date = Day 1)
+    final daysSinceStart = today.difference(startDate).inDays + 1;
+    return daysSinceStart.clamp(1, 30);
+  }
 }
