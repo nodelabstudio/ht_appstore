@@ -5,35 +5,38 @@
 See: .planning/PROJECT.md (updated 2025-01-25)
 
 **Core value:** One tap completes today's challenge and keeps the streak alive
-**Current focus:** Phase 3 - Monetization & Settings
+**Current focus:** Phase 04.1 - Fix Streak and Day Tracking (URGENT BUG FIX)
 
 ## Current Position
 
-Phase: 3 of 4 (Monetization & Settings)
-Plan: 1 of 4 (RevenueCat SDK Foundation)
-Status: In progress
-Last activity: 2026-01-29 - Completed 03-01-PLAN.md
+Phase: 04.1 (Fix Streak and Day Tracking) - INSERTED
+Plan: 1 of 1
+Status: Phase complete
+Last activity: 2026-02-06 - Completed 04.1-01-PLAN.md
 
-Progress: [██████████] Phase 1 complete | [██████████] Phase 2 complete | [███░░░░░░░] Phase 3 1/4
+Progress: [██████████] Phase 1 complete | [██████████] Phase 2 complete | [██████████] Phase 3 complete | [████░░░░░░] Phase 4 2/3
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: 22.6 min
-- Total execution time: 3.7 hours
+- Total plans completed: 18
+- Total execution time: ~4.5 hours
 
 **By Phase:**
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| 01-foundation-core-flow | 5/5 | 17 min | 3.4 min |
-| 02-ios-integration | 7/7 | 208 min | 29.7 min |
-| 03-monetization-settings | 1/4 | 7 min | 7.0 min |
+| Phase | Plans | Status |
+|-------|-------|--------|
+| 01-foundation-core-flow | 5/5 | Complete |
+| 02-ios-integration | 7/7 | Complete |
+| 03-monetization-settings | 4/4 | Complete |
+| 04.1-fix-streak-and-day-tracking | 1/1 | Complete |
+| 04-stats-and-polish | 1/3 | In progress |
 
-**Recent Trend:**
-- Last 5 plans: 02-04 (2 min), 02-05 (verification), 02-06 (3 min), 02-07 (5 min), 03-01 (7 min)
-- Trend: Foundation/wiring plans consistently fast
+**Recent Completions:**
+- 03-03: Settings Screen Expansion
+- 03-04: Phase 3 Verification
+- 04-01: Completion Chart
+- 04.1-01: Fix Streak and Day Tracking (Bug fix)
 
 *Updated after each plan completion*
 
@@ -107,9 +110,37 @@ Recent decisions affecting current work:
 - RevenueCatService follows NotificationService singleton pattern for consistency
 - MonetizationConstants uses placeholder values (API key, URLs) for user replacement
 
+**Day 8 Device Testing Decisions (2026-02-03):**
+- LayoutBuilder for responsive progress ring sizing (40-60px) to prevent overflow on different devices
+- Widget deep link URL requires `?homeWidget` query parameter for home_widget package to receive click events
+- App display name set to "Quest 30" in Info.plist (CFBundleDisplayName, CFBundleName)
+
+**Plan 04.1-01 Decisions:**
+- DateTime.utc(year, month, day) for all date storage (not DateTime.now().toUtc() which shifts time)
+- Start date validation in toggleCompletion() prevents pre-challenge completions
+- Comprehensive doc comments added to Challenge model computed properties for date logic clarity
+
 ### Pending Todos
 
-None yet.
+**Remaining for App Store submission:**
+- [ ] Configure RevenueCat with real API key
+- [ ] Create custom paywall design in RevenueCat Dashboard
+- [ ] Add confetti animation for 30/30 challenge completion
+- [ ] Audit codebase for placeholder content (TODO, Lorem ipsum, etc.)
+- [ ] Complete offline testing
+- [ ] Final compliance checklist
+
+**V2 Features (documented in PROJECT.md):**
+- [ ] CONT-02: Custom challenge creation (user-defined challenges)
+
+### Roadmap Evolution
+
+- Phase 04.1 inserted after Phase 4: Fix Streak and Day Tracking Calculations (URGENT) - COMPLETED
+  - Bug introduced during Phase 4 polish work
+  - Progress ring count correct, but Day Counter off by 1, Streak not counting until 10+ days
+  - Duplicate entries possible when using calendar + Done button
+  - Root cause: Inconsistent date storage/comparison formats across codebase
+  - FIXED: Established DateTime.utc(year, month, day) normalization pattern, added start date validation
 
 ### Blockers/Concerns
 
@@ -130,11 +161,26 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-29 18:21 UTC
-Stopped at: Completed 03-01-PLAN.md (RevenueCat SDK Foundation)
-Resume file: None - ready for 03-02 (Paywall Screen)
+Last session: 2026-02-06
+Stopped at: Completed Phase 04.1 bug fix (streak and day tracking)
+Resume file: None - ready for 04-02 (Pre-launch Polish & Compliance Audit)
+
+**Bugs fixed in Phase 04.1:**
+1. StreakCalculator.getCurrentUtcTimestamp() using incorrect DateTime.now().toUtc() pattern
+2. Missing start date validation in toggleCompletion() allowing pre-challenge completions
+3. Challenge model computed properties lacked documentation for complex date logic
+
+**Tasks completed:**
+- Fixed UTC normalization in StreakCalculator (renamed method to getTodayUtcTimestamp)
+- Added start date validation to ChallengeRepository.toggleCompletion()
+- Documented Challenge model date logic (Set deduplication, inclusive counting)
+
+**Commits:**
+- 56af68d: fix(04.1-01): fix StreakCalculator UTC normalization
+- 9071d3f: fix(04.1-01): add start date validation to toggleCompletion
+- 53c5823: docs(04.1-01): document Challenge model date logic
 
 ---
 
 *State initialized: 2026-01-26*
-*Last updated: 2026-01-29*
+*Last updated: 2026-02-06*
